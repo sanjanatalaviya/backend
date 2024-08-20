@@ -1,0 +1,1 @@
+module.exports.salespeopleCont = require("./salespeople.model");
