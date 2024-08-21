@@ -68,12 +68,14 @@ router.get('/google/callback',
             const optionAcc = {
                 httpOnly: true,
                 secure: true,
+                sameSite: 'None',
                 maxAge: 60 * 60 * 1000,
             };
 
             const optionRef = {
                 httpOnly: true,
                 secure: true,
+                sameSite: 'None',
                 maxAge: 60 * 60 * 24 * 10 * 1000,
             };
 
