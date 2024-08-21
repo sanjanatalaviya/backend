@@ -13,7 +13,7 @@ router.get('/get-categories',
 );
 
 router.get('/list-categories',
-    auth(["admin", "employee", "user"]),
+    // auth(["admin", "employee", "user"]),
     categoriesController.listCategory
 );
 

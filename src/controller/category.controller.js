@@ -1,18 +1,18 @@
 const Categories = require("../model/categories.model")
 
 const listCategory = async (req, res) => {
-    console.log("categorijhxvsjhdvjd", req.user);
+    // console.log("categorijhxvsjhdvjd", req.user);
     // console.log(req.query.page, req.query.pageSize);
 
-    let page = parseInt(req.query.page)
-    let pageSize = parseInt(req.query.pageSize);
+    // let page = parseInt(req.query.page)
+    // let pageSize = parseInt(req.query.pageSize);
 
-    if (page <= 0 || pageSize <= 0) {
-        return res.status(400).json({
-            success: false,
-            message: "page or pageSize is must be greater than zero."
-        })
-    }
+    // if (page <= 0 || pageSize <= 0) {
+    //     return res.status(400).json({
+    //         success: false,
+    //         message: "page or pageSize is must be greater than zero."
+    //     })
+    // }
 
     try {
         const categories = await Categories.find();
@@ -23,27 +23,27 @@ const listCategory = async (req, res) => {
             });
         }
 
-        let startIndex = 0, endIndex = 0, pagination = [];
-        if (page > 0 && pageSize > 0) {
-            startIndex = (page - 1) * pageSize;                     //startIndex = (3-1)* 3 = 3
-            endIndex = startIndex + pageSize;                      //endINdex = 3+3 = 6
-            pagination = categories.slice(startIndex, endIndex)
-        }
+        // let startIndex = 0, endIndex = 0, pagination = [];
+        // if (page > 0 && pageSize > 0) {
+        //     startIndex = (page - 1) * pageSize;                     //startIndex = (3-1)* 3 = 3
+        //     endIndex = startIndex + pageSize;                      //endINdex = 3+3 = 6
+        //     pagination = categories.slice(startIndex, endIndex)
+        // }
 
         // console.log(startIndex, endIndex, pagination);
 
-        return res.status(200).json({
-            success: true,
-            totalData: categories.length,
-            message: "categories fetched successfully.",
-            data: pagination
-        })
-
-        // res.status(200).json({
+        // return res.status(200).json({
         //     success: true,
-        //     message: "productes fetched successfully.",
-        //     data: categories
+        //     totalData: categories.length,
+        //     message: "categories fetched successfully.",
+        //     data: pagination
         // })
+
+        res.status(200).json({
+            success: true,
+            message: "productes fetched successfully.",
+            data: categories
+        })
     } catch (error) {
         res.status(500).json({
             success: false,
