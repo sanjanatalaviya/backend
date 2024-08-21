@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
     '/register',
-    // upload.single('avatar'),
+    upload.single('avatar'),
     usersController.register
 );
 

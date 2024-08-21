@@ -45,7 +45,7 @@ const varifyaccesRefTokan = async (id) => {
 
 const register = async (req, res) => {
     try {
-        // console.log(req.file);
+        console.log(req.file);
 
         const { email, password } = req.body
         const user = await Users.findOne({
@@ -60,8 +60,9 @@ const register = async (req, res) => {
         }
 
         const hashPassword = await bcrypt.hash(password, 10)
-        const userData = await Users.create({ ...req.body, password: hashPassword }) //, avatar: req.file.path 
-
+        const userData = await Users.create({
+            ...req.body, password: hashPassword, avatar: req.file.path
+        }) //, avatar: req.file.path 
         if (!userData) {
             return res.status(500).json({
                 success: false,
