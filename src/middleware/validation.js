@@ -3,7 +3,7 @@ const pick = require("../helper/pick");
 
 const validation = (schema) => (req, res, next) => {
     // console.log(schema);
-    // console.log(req);
+    console.log(req.body);
     // console.log(Object.keys(schema));
 
     const objs = pick(req, Object.keys(schema));
