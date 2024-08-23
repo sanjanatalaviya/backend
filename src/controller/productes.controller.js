@@ -49,7 +49,7 @@ const getProductes = async (req, res) => {
 
 const addProductes = async (req, res) => {
     console.log(req.body);
-    console.log(req.file);
+    console.log("file res", req.file);
 
     const fileRes = await uploadeFile(req.file.path, "product");
     console.log(fileRes);
