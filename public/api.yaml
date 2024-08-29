@@ -150,7 +150,7 @@ paths:
         summary: List the Categories
         description: Optional extended description in CommonMark or HTML.
         tags: 
-        - categories
+        - Category
         responses:
           '200':    # status code
             description: A JSON array of user names
@@ -159,13 +159,44 @@ paths:
                 schema: 
                   type: array
                   items: 
-                    type: string  
+                    type: string 
+  /categories/add-category:
+    post:
+      summary: Add Category
+      description: Optional extended description in CommonMark or HTML.
+      tags: 
+        - Category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+      responses: 
+        '201':
+          description: Created
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string 
   /categories/update-category/{category_id}:                                              
     put:
       summary: Update a Category
       description: Update the details of a specific category.
       tags:
-      - categories
+      - Category
       parameters:
         - in: path
           name: category_id
@@ -197,7 +228,7 @@ paths:
       summary: Delete a Category
       description: Remove a specific category from the list.
       tags:
-        - categories
+        - Category
       parameters:
         - in: path
           name: category_id
@@ -209,5 +240,389 @@ paths:
           description: Category successfully deleted.
         '404':
           description: Category not found.
-                   
-                  #  running into the browser like this for testing: http://localhost:8000/api-docs
+  /subcategories/list-subcategories:
+      get:
+        summary: List the Categories
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Subcategory
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string  
+  /subcategories/add-subcategory:
+    post:
+      summary: Add Subcategory
+      description: Optional extended description in CommonMark or HTML.
+      tags: 
+        - Subcategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+      responses: 
+        '201':
+          description: Created
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /subcategories/update-subcategory/{subcategory_id}:
+    put:
+      summary: Update a Subcategory
+      description: Update the details of a specific subcategory.
+      tags:
+      - Subcategory
+      parameters:
+        - in: path
+          name: subcategory_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: The updated subcategory details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subcategory_id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+  /subcategories/delete-subcategory/{subcategory_id}:
+    delete:
+      summary: Delete a Subcategory
+      description: Remove a specific category from the list.
+      tags:
+        - Subcategory
+      parameters:
+        - in: path
+          name: subcategory_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subcategory successfully deleted.
+        '404':
+          description: Subcategory not found.
+  /productes/list-productes:
+      get:
+        parameters:
+          - in: query
+            name: page
+            schema:
+              type: integer
+            description: The number of items to skip before starting to collect the result set
+          - in: query
+            name: pageSize
+            schema:
+              type: integer
+            description: The numbers of items to return
+        summary: List the Productes
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Productes
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string  
+  /productes/add-productes:
+      post:
+        summary: Add Productes
+        description: Add a new product with essential details including an image.
+        tags: 
+        - Productes
+        requestBody:
+          required: true
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+                properties:
+                  category_id:
+                    type: string
+                  subcategory_id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  image:
+                    type: string
+                    format: binary
+        responses: 
+          '201':
+            description: Created
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /productes/update-productes/{product_id}:
+    put:
+      summary: Update Productes
+      description: Update an existing product with essential details including an image.
+      tags: 
+      - Productes
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: string
+                subcategory_id:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses: 
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_id:
+                    type: string
+                  category_id:
+                    type: string
+                  subcategory_id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  image:
+                    type: string
+        '404':
+          description: Product not found
+  /productes/delete-productes/{product_id}:
+    delete:
+      summary: Delete a Productes
+      description: Remove a specific category from the list.
+      tags:
+        - Productes
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Productes successfully deleted.
+        '404':
+          description: Productes not found.
+  /variants/list-variant:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/add-variant:
+    post:
+      summary: Add Variants
+      description: Add a new variant with essential details including an image.
+      tags:
+      - Variants
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: string
+                subcategory_id:
+                  type: string
+                product_id:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: number
+                discount:
+                  type: number
+                attributes:
+                  type: object
+                variant_image:
+                  type: string
+                  format: binary                   
+      responses:
+        '201':
+          description: Created
+        '200':
+          description: The added variant details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category_id:
+                    type: string
+                  subcategory_id:
+                    type: string
+                  product_id:
+                    type: string
+                  price:
+                    type: number
+                  stock:
+                    type: number
+                  discount:
+                    type: number
+                  attributes:
+                    type: object
+                  variant_image:
+                    type: string
+                    format: binary  
+  /variants/update-variant/{variant_id}:
+    put:
+      summary: Update Variants
+      description: Update an existing product with essential details including an image.
+      tags: 
+      - Variants
+      parameters:
+        - in: path
+          name: variant_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                category_id:
+                  type: string
+                subcategory_id:
+                  type: string
+                product_id:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: number
+                discount:
+                  type: number
+                attributes:
+                  type: object
+                variant_image:
+                  type: string
+                  format: binary
+      responses: 
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category_id:
+                  type: string
+                subcategory_id:
+                  type: string
+                product_id:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: number
+                discount:
+                  type: number
+                attributes:
+                  type: object
+                variant_image:
+                  type: string
+                  format: binary
+        '404':
+          description: Variants not found
+  /variants/delete-variant/{variant_id}:
+    delete:
+      summary: Delete a Variants
+      description: Remove a specific category from the list.
+      tags:
+        - Variants
+      parameters:
+        - in: path
+          name: variant_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Variants successfully deleted.
+        '404':
+          description: Variants not found.                           
+                #  running into the browser like this for testing: http://localhost:8000/api-docs
