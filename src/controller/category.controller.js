@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Categories = require("../model/categories.model")
 
 const listCategory = async (req, res) => {
@@ -143,10 +144,190 @@ const updateCategory = async (req, res) => {
     }
 }
 
+const inActive = async (req, res) => {
+    const category = await Categories.aggregate(
+        [
+            {
+                $match: {
+                    "isActive": false
+                }
+            },
+            {
+                $group: {
+                    _id: "_id",
+                    "totalInactive": {
+                        $sum: 1
+                    }
+                }
+            }
+        ]
+    )
+    res.status(200).json({
+        success: true,
+        message: "category inActive successfully.",
+        data: category
+    })
+    console.log(category);
+}
+
+const active = async (req, res) => {
+    const category = await Categories.aggregate(
+        [
+            {
+                $match: {
+                    "isActive": true
+                }
+            },
+            {
+                $group: {
+                    _id: "_id",
+                    "totalActive": {
+                        $sum: 1
+                    }
+                }
+            }
+        ]
+    )
+    res.status(200).json({
+        success: true,
+        message: "category inActive successfully.",
+        data: category
+    })
+    console.log(category);
+}
+
+const highproduct = async (req, res) => {
+    const category = await Categories.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "categori_id",
+                "as": "products"
+            }
+        },
+        {
+            $project: {
+                categoryName: "$name",
+                productCount: { "$size": "$products" }
+            }
+        },
+        {
+            $sort: {
+                "productCount": -1
+            }
+        },
+        {
+            $limit: 3
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: "category inActive successfully.",
+        data: category
+    })
+    console.log(category);
+}
+
+const averagenproduct = async (req, res) => {
+    const averagenuproduct = await Categories.aggregate([
+        {
+            $group: {
+                _id: "$category_id",
+                productCount: { $sum: 1 }
+            }
+        },
+        {
+            $group: {
+                _id: "null",
+                averageCount: { $avg: "$productCount" }
+            }
+        }
+    ]);
+    res.status(200).json({
+        success: true,
+        message: "countsubcate get  succesfully",
+        data: averagenuproduct
+    })
+    console.log(averagenuproduct);
+}
+
+const countsubcategories = async (req, res) => {
+    const countsubcate = await Categories.aggregate([
+        {
+            $lookup: {
+                from: "subcategories",
+                localField: "_id",
+                foreignField: "category_id",
+                as: "Subacategory"
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                category_name: "$name",
+                countsubcategories: "$Subacategory"
+            }
+        }
+    ]);
+    res.status(200).json({
+        success: true,
+        message: "countsubcate get  succesfully",
+        data: countsubcate
+    })
+    console.log(countsubcate);
+}
+
+const subcategorioncategori = async (req, res) => {
+    const { category_id } = req.params;
+    try {
+        const retviecategoryonsubcate = await Categories.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(category_id)
+                }
+            },
+            {
+                $lookup: {
+                    from: "subcategories",
+                    localField: "_id",
+                    foreignField: "category_id",
+                    as: "subcategories"
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    category_name: "$name",
+                    subcategories: "$subcategories"
+                }
+            }
+        ]);
+        res.status(200).json({
+            success: true,
+            message: "Subcategories retrieved successfully.",
+            data: retviecategoryonsubcate[0]
+        });
+        console.log(retviecategoryonsubcate);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while retrieving subcategories.",
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     listCategory,
     getCategory,
     addCategory,
     deleteCategory,
-    updateCategory
+    updateCategory,
+    inActive,
+    active,
+    highproduct,
+    averagenproduct,
+    countsubcategories,
+    subcategorioncategori
 }

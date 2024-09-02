@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
-const shippingsSchema = new mongoose.Schema(
+const ratingSchema = new mongoose.Schema(
     {
-        orders_id: {
-            type: mongoose.Types.ObjectId,
-            ref: 'Orders',
-            required: true
-        },
-        products_id: {
+        product_id: {
             type: mongoose.Types.ObjectId,
             ref: 'Productes',
+            required: true
+        },
+        user_id: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Users',
             required: true
         },
         rating: {
@@ -27,10 +27,10 @@ const shippingsSchema = new mongoose.Schema(
         }
     },
     {
-        timeseries: true,
+        timestamps: true,
         versionKey: false
     }
-)
+);
 
-const Shippings = mongoose.model("Shippings", shippingsSchema);
-module.exports = Shippings;
+const Rating = mongoose.model("Ratings", ratingSchema);
+module.exports = Rating;

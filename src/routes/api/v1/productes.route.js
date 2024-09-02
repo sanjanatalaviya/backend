@@ -36,6 +36,38 @@ router.get('/getproBysub/:subcategory_id',
 
 router.get('/search-productes',
     productesController.searchProductes
-)
+);
+
+router.get('/productesbycat/:category_id',
+    productesController.productsByCategory
+);
+
+router.get('/probysub/:subcategory_id',
+    productesController.productsBySubcategory
+);
+
+router.get('/toprated',
+    productesController.toprated
+);
+
+router.get('/arrivals',
+    productesController.arrivals
+);
+
+router.get('/discount',
+    productesController.discount
+);
+
+router.get('/count',
+    productesController.count
+);
+
+router.get('/out-of-stock',
+    productesController.outofstock
+);
+
+router.get('/variant-details/:product_id',
+    productesController.variantsDatils
+);
 
 module.exports = router;

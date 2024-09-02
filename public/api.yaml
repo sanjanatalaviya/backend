@@ -18,12 +18,120 @@ components:
 security:
   - bearerAuth: []     
 paths:
+
+
+
+  /users/delete-user/{_id}:
+    delete:
+      summary: Delete a Users
+      description: Remove a specific Users from the list.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Users successfully deleted.
+        '404':
+          description: Users not found.
+  /users/update-user/{_id}:
+    put:
+      summary: update user.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+          description: Update user.
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                role:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /users/order/{_id}:
+    get:
+      parameters:
+        - in: path
+          name: _id
+          schema:
+            type: string
+          required: true
+          description: get users.
+      summary: get users.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - Users
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /users/get-user/{_id}:
+    get:
+      summary: Get a Users
+      description: Remove a specific Users from the list.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Users successfully deleted.
+        '404':
+          description: Users not found. 
+  /users/list-user:
+      get:
+        summary: List the Users
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Users
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
   /users/register:
     post:
       summary: User Registration
       description: Optional extended description in CommonMark or HTML.
       tags: 
-      - users
+      - Users
       requestBody:
         required: true
         content:
@@ -38,7 +146,7 @@ paths:
                 role:
                   type: string
                 email:
-                  type: string
+                  type: string  
                 avatar:
                   type: string
                   format: binary
@@ -59,7 +167,7 @@ paths:
       summary: User Login
       description: Optional extended description in CommonMark or HTML.
       tags: 
-      - users
+      - Users
       requestBody:
         required: true
         content:
@@ -88,7 +196,7 @@ paths:
       summary: User Logout
       description: Optional extended description in CommonMark or HTML.
       tags: 
-      - users
+      - Users
       requestBody:
         required: true
         content:
@@ -108,7 +216,9 @@ paths:
                 items: 
                   type: string                
   /users/newToken:
-     post:
+    post:
+      tags:
+      - Users
       summary: Generate a New Token.
       description: Optional extended description in CommonMark or HTML.
       responses:
@@ -125,7 +235,7 @@ paths:
         summary: Authenticate With Google.
         description: YOu Can Authenticate Direct With Browser.
         tags: 
-        - users
+        - Users
         responses:
           '200':    # status code
             description: A JSON array of user names
@@ -134,7 +244,28 @@ paths:
                 schema: 
                   type: array
                   items: 
-                    type: string               
+                    type: string   
+
+
+
+
+  /categories/get-categories/{category_id}:
+    get:
+      summary: Get a Category
+      description: Remove a specific category from the list.
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: category_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Category successfully deleted.
+        '404':
+          description: Category not found. 
   /categories/list-categories:
       get:
         parameters:
@@ -241,9 +372,322 @@ paths:
           description: Category successfully deleted.
         '404':
           description: Category not found.
+  /categories/get-inActive:
+    get:
+      summary: Returns a count of Inactive categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /categories/get-active:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /categories/get-highpro:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /categories/get-subtocat/{category_id}:
+    get:
+      summary: category in a specific category.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: category in a specific category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category_id:
+                    type: string
+                    description: The number of active categories.
+  /categories/get-countcat:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /categories/get-avgpro:
+    get:
+      summary: Returns a count of active categories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Category
+      responses:
+        '200':
+          description: The count of active categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active categories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+
+
+
+
+  /subcategories/get-countcat:
+    get:
+      summary: Returns a count of Inactive subcategories.
+      description: Retrieves the number of subcategories that are currently active in the system.
+      tags:
+        - Subcategory
+      responses:
+        '200':
+          description: The count of active subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active subcategories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /subcategories/get-subInactive:
+    get:
+      summary: Returns a count of Inactive subcategories.
+      description: Retrieves the number of subcategories that are currently active in the system.
+      tags:
+        - Subcategory
+      responses:
+        '200':
+          description: The count of active subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active subcategories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /subcategories/get-highest:
+    get:
+      summary: Returns a count of active Subcategory.
+      description: Retrieves the number of Subcategory that are currently active in the system.
+      tags:
+        - Subcategory
+      responses:
+        '200':
+          description: The count of active Subcategory.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active Subcategory.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /subcategories/parent-of-subcategory:
+    get:
+      summary: Returns a count of Inactive subcategories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Subcategory
+      responses:
+        '200':
+          description: The count of active subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active subcategories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /subcategories/get-subactive:
+    get:
+      summary: Returns a count of Inactive subcategories.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Subcategory
+      responses:
+        '200':
+          description: The count of active subcategories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active subcategories.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /subcategories/get-subcategories/{subcategory_id}:
+    get:
+      summary: Get a Subcategory
+      description: Remove a specific subcategory from the list.
+      tags:
+        - Subcategory
+      parameters:
+        - in: path
+          name: subcategory_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subcategory successfully.
+        '404':
+          description: Subcategory not found. 
   /subcategories/list-subcategories:
       get:
-        summary: List the Categories
+        summary: List the  subcategories
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Subcategory
@@ -343,6 +787,293 @@ paths:
           description: Subcategory successfully deleted.
         '404':
           description: Subcategory not found.
+
+
+
+
+  /productes/variant-details/{product_id}:
+    get:
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: variant_details.
+      summary: get products.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - Productes
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /productes/out-of-stock:
+    get:
+      summary: recently added Productes.
+      description: Retrieves the number of Productes that are currently active in the system.
+      tags:
+        - Productes
+      responses:
+        '200':
+          description: out-of-stock.
+          content:
+            application/json:
+              schema:
+                type: object
+  /productes/count:
+    get:
+      summary: Returns a count of active productes.
+      description: Retrieves the number of productes that are currently active in the system.
+      tags:
+        - Productes
+      responses:
+        '200':
+          description: The count of active productes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active productes.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /productes/discount:
+    get:
+      summary: Returns a count of Inactive productes.
+      description: Retrieves the number of productes that are currently active in the system.
+      tags:
+        - Productes
+      responses:
+        '200':
+          description: The count of active productes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active productes.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /productes/arrivals:
+    get:
+      summary: Returns a count of Inactive productes.
+      description: Retrieves the number of productes that are currently active in the system.
+      tags:
+        - Productes
+      responses:
+        '200':
+          description: The count of active productes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active productes.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /productes/toprated:
+    get:
+      summary: Returns a count of Inactive productes.
+      description: Retrieves the number of productes that are currently active in the system.
+      tags:
+        - Productes
+      responses:
+        '200':
+          description: The count of active productes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of active productes.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message explaining the issue.
+  /productes/probysub/{subcategory_id}:
+      get:
+        summary: Get a Productes
+        description: Remove a specific productes from the list.
+        tags:
+          - Productes
+        parameters:
+          - in: path
+            name: subcategory_id
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Productes successfully.
+          '404':
+            description: Productes not found. 
+  /productes/productesbycat/{category_id}:
+      get:
+        summary: Get a Productes
+        description: Remove a specific productes from the list.
+        tags:
+          - Productes
+        parameters:
+          - in: path
+            name: category_id
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Productes successfully.
+          '404':
+            description: Productes not found. 
+  /productes/search-productes:
+    get:
+      summary: Get Productes
+      description: Retrieve a list of Productes based on query parameters.
+      tags:
+        - Productes
+      parameters:
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: The sort order of the products.
+        - in: query
+          name: cart
+          schema:
+            type: integer
+            format: int32
+          description: Minimum average rating of the products.
+        - in: query
+          name: max
+          schema:
+            type: number
+            format: float
+          description: Maximum price of the products.
+        - in: query
+          name: min
+          schema:
+            type: number
+            format: float
+          description: Minimum price of the products.
+        - in: query
+          name: category
+          schema:
+            type: integer
+            format: int32
+          description: Category ID to filter the products.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int32
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+          description: Number of products per page.
+      responses:
+        '200':
+          description: Productes successfully fetched.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        variants:
+                          type: array
+                          items:
+                            type: object
+                        reviews:
+                          type: array
+                          items:
+                            type: object
+        '500':
+          description: Failed to fetch products data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /productes/get-productes/{product_id}:
+    get:
+      summary: Get a productes
+      description: Remove a specific Productes from the list.
+      tags:
+        - Productes
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Productes successfully.
+        '404':
+          description: Productes not found. 
   /productes/list-productes:
       get:
         parameters:
@@ -460,7 +1191,7 @@ paths:
   /productes/delete-productes/{product_id}:
     delete:
       summary: Delete a Productes
-      description: Remove a specific category from the list.
+      description: Remove a specific productes from the list.
       tags:
         - Productes
       parameters:
@@ -474,6 +1205,171 @@ paths:
           description: Productes successfully deleted.
         '404':
           description: Productes not found.
+
+
+
+
+  /variants/productslowstock:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/morethanonevariant:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/get-variant/{variant_id}:
+    get:
+      summary: Get a variants
+      description: Remove a specific variants from the list.
+      tags:
+        - Variants
+      parameters:
+        - in: path
+          name: variant_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: variants successfully.
+        '404':
+          description: variants not found. 
+  /variants/Variantdetails:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/activevarint:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/variantparticularproduct:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/productswithhighesprices:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/countproduct:
+      get:
+        summary: List the Variants
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Variants
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /variants/countstock/{product_id}:
+    get:
+      summary: Get a variants
+      description: Remove a specific variants from the list.
+      tags:
+        - Variants
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: variants successfully.
+        '404':
+          description: variants not found. 
+  /variants/varianbypro/{product_id}:
+    get:
+      summary: variants in a specific variants.
+      description: Retrieves the number of Variants that are currently active in the system.
+      tags:
+        - Variants
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: variants in a specific Variants
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_id:
+                    type: string
+                    description: The number of active Variants.
   /variants/list-variant:
       get:
         summary: List the Variants
@@ -549,7 +1445,7 @@ paths:
   /variants/update-variant/{variant_id}:
     put:
       summary: Update Variants
-      description: Update an existing product with essential details including an image.
+      description: Update an existing variants with essential details including an image.
       tags: 
       - Variants
       parameters:
@@ -612,7 +1508,7 @@ paths:
   /variants/delete-variant/{variant_id}:
     delete:
       summary: Delete a Variants
-      description: Remove a specific category from the list.
+      description: Remove a specific variants from the list.
       tags:
         - Variants
       parameters:
@@ -625,5 +1521,700 @@ paths:
         '200':
           description: Variants successfully deleted.
         '404':
-          description: Variants not found.                           
-                #  running into the browser like this for testing: http://localhost:8000/api-docs
+          description: Variants not found. 
+
+
+
+
+  /rating/no-reviews:
+    get:
+      summary: count of Rating for each product.
+      description: Retrieves the number of rating that are currently active in the system.
+      tags:
+        - Rating
+      responses:
+        '200':
+          description: count of Rating for each product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of Rating for each product.
+  /rating/with-comments:
+    get:
+      summary: Rating that include comments.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - Rating
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+  /rating/top-rated-products:
+    get:
+      summary: count of Rating for each product.
+      description: Retrieves the number of rating that are currently active in the system.
+      tags:
+        - Rating
+      responses:
+        '200':
+          description: count of rating for each product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of rating for each product.
+  /rating/count-products:
+    get:
+      summary: count of reviews for each rating.
+      description: Retrieves the number of categories that are currently active in the system.
+      tags:
+        - Rating
+      responses:
+        '200':
+          description: count of reviews for each rating.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: count of reviews for each rating.
+  /rating/list-rating:
+      get:
+        summary: List the Rating
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Rating
+        responses:
+          '200':    # status code
+            description: A JSON array of user names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /rating/get-rating/{_id}:
+    get:
+      summary: Get a Rating
+      description: Remove a specific Rating from the list.
+      tags:
+        - Rating
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rating successfully get data.
+        '404':
+          description: Rating not found. 
+  /rating/delete-rating/{_id}:
+    delete:
+      summary: Delete a Rating
+      description: Remove a specific category from the list.
+      tags:
+        - Rating
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rating successfully deleted.
+        '404':
+          description: Rating not found.
+  /rating/add-rating:
+    post:
+      summary: Add Rating
+      description: Add a new rating with essential details including an image.
+      tags:
+      - Rating
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                user_id:
+                  type: string
+                rating:
+                  type: number
+                review:
+                  type: string            
+      responses:
+        '201':
+          description: Created
+        '200':
+          description: The added rating details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_id:
+                    type: string
+                  user_id:
+                    type: string
+                  rating:
+                    type: number
+                  review:
+                    type: string
+  /rating/update-rating/{_id}:
+    put:
+      summary: Update Rating
+      description: Update an existing rating with essential details.
+      tags:
+      - Rating
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                user_id:
+                  type: string
+                rating:
+                  type: number  
+                review:
+                  type: string  
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_id:
+                    type: string
+                  user_id:
+                    type: string
+                  rating:
+                    type: number  
+                  review:
+                    type: string  
+        '404':
+          description: Rating not found
+
+
+
+
+  /order/list-order:
+      get:
+        summary: List the order
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Orders
+        responses:
+          '200':    # status code
+            description: A JSON array of order names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /order/get-order/{_id}:
+    get:
+      summary: Get a order
+      description: Remove a specific order from the list.
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: order successfully get data.
+        '404':
+          description: order not found. 
+  /order/delete-order/{_id}:
+    delete:
+      summary: Delete a order
+      description: Remove a specific order from the list.
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: order successfully deleted.
+        '404':
+          description: order not found.
+  /order/add-order:
+    post:
+      summary: Add order
+      description: Add a new order with essential details including an image.
+      tags:
+      - Orders
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                discount:
+                  type: number
+                status:
+                  type: string
+                shipping_amount:
+                  type: string            
+      responses:
+        '201':
+          description: Created
+        '200':
+          description: The added order details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                  discount:
+                    type: number
+                  status:
+                    type: string
+                  shipping_amount:
+                    type: string
+  /order/update-order/{_id}:
+    put:
+      summary: Update Rating
+      description: Update an existing order with essential details.
+      tags:
+      - Orders
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                discount:
+                  type: number
+                status:
+                  type: string
+                shipping_amount:
+                    type: string 
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                  discount:
+                    type: number
+                  status:
+                    type: string
+                  shipping_amount:
+                    type: string  
+        '404':
+          description: order not found
+
+
+
+  /payment/order/{order_id}:
+    get:
+      summary: Get a payment Order
+      description: Remove a specific payment from the list.
+      tags:
+        - Payments
+      parameters:
+        - in: path
+          name: order_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: payment successfully get data.
+        '404':
+          description: payment not found. 
+  /payment/list-payment:
+      get:
+        summary: List the payment
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Payments
+        responses:
+          '200':    # status code
+            description: A JSON array of order names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /payment/get-payment/{_id}:
+    get:
+      summary: Get a payment
+      description: Remove a specific payment from the list.
+      tags:
+        - Payments
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: payment successfully get data.
+        '404':
+          description: payment not found. 
+  /payment/delete-payment/{_id}:
+    delete:
+      summary: Delete a payment
+      description: Remove a specific payment from the list.
+      tags:
+        - Payments
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: payment successfully deleted.
+        '404':
+          description: payment not found.
+  /payment/add-payment:
+    post:
+      summary: Add payment
+      description: Add a new payment with essential details including an image.
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: boolean          
+      responses:
+        '201':
+          description: Created
+        '200':
+          description: The added payment details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_id:
+                    type: string
+                  type:
+                    type: string
+                  status:
+                    type: boolean 
+  /payment/update-payment/{_id}:
+    put:
+      summary: Update payment
+      description: Update an existing payment with essential details.
+      tags:
+      - Payments
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                type:
+                  type: string
+                status:
+                  type: boolean 
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_id:
+                    type: string
+                  type:
+                    type: string
+                  status:
+                    type: boolean  
+        '404':
+          description: payment not found
+
+
+
+
+  /cart/list-cart:
+      get:
+        summary: List the cart
+        description: Optional extended description in CommonMark or HTML.
+        tags: 
+        - Carts
+        responses:
+          '200':    # status code
+            description: A JSON array of order names
+            content:
+              application/json:
+                schema: 
+                  type: array
+                  items: 
+                    type: string
+  /cart/get-cart/{_id}:
+    get:
+      summary: Get a cart
+      description: Remove a specific cart from the list.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: cart successfully get data.
+        '404':
+          description: cart not found. 
+  /cart/delete-cart/{_id}:
+    delete:
+      summary: Delete a cart
+      description: Remove a specific cart from the list.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: cart successfully deleted.
+        '404':
+          description: cart not found.
+  /cart/add-cart:
+    post:
+      summary: Add a new cart
+      description: Add a new cart with essential details including items.
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  format: objectid
+                  description: The ID of the user who owns the cart.
+                isActive:
+                  type: boolean
+                  description: Indicates whether the cart is active or not.
+                itemsSchema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                        format: objectid
+                        description: The ID of the product in the cart.
+                      quantity:
+                        type: number
+                        default: 1
+                        description: The quantity of the product.
+              required:
+                - user_id
+                - items
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    format: objectid
+                    description: The ID of the created cart.
+                  user_id:
+                    type: string
+                    format: objectid
+                    description: The ID of the user who owns the cart.
+                  isActive:
+                    type: boolean
+                    description: Indicates whether the cart is active or not.
+                  itemsSchema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                          format: objectid
+                          description: The ID of the product in the cart.
+                        quantity:
+                          type: number
+                          default: 1
+                          description: The quantity of the product.
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error                    
+  /cart/update-cart/{_id}:
+    put:
+      summary: Update a cart
+      description: Update an existing cart with essential details including items.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+            format: objectid
+          description: The ID of the cart to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  format: objectid
+                  description: The ID of the user who owns the cart (optional).
+                isActive:
+                  type: boolean
+                  description: Indicates whether the cart is active or not (optional).
+                itemsSchema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: string
+                        format: objectid
+                        description: The ID of the product in the cart.
+                      quantity:
+                        type: number
+                        default: 1
+                        description: The quantity of the product.
+              required:
+                - itemsSchema
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    format: objectid
+                    description: The ID of the updated cart.
+                  user_id:
+                    type: string
+                    format: objectid
+                    description: The ID of the user who owns the cart.
+                  isActive:
+                    type: boolean
+                    description: Indicates whether the cart is active or not.
+                  itemsSchema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                          format: objectid
+                          description: The ID of the product in the cart.
+                        quantity:
+                          type: number
+                          default: 1
+                          description: The quantity of the product.
+        '404':
+          description: Cart not found
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+
+
+
+
+#  running into the browser like this for testing: http://localhost:8000/api-docs

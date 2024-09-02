@@ -6,8 +6,8 @@ const { categoryValidation } = require('../../../validation.js/index.js');
 
 const router = express.Router();
 
-router.get('/get-categories',
-    ///:category_id
+router.get('/get-categories/:category_id',
+    //  /:category_id
     validation(categoryValidation.getCategory),
     categoriesController.getCategory
 );
@@ -34,6 +34,30 @@ router.delete('/delete-category/:category_id',
     //     console.log("categories delete api.");
     //     res.send('categories delete api.');
     // }
+);
+
+router.get('/get-inActive',
+    categoriesController.inActive
+);
+
+router.get('/get-active',
+    categoriesController.active
+);
+
+router.get('/get-highpro',
+    categoriesController.highproduct
+);
+
+router.get('/get-avgpro',
+    categoriesController.averagenproduct
+);
+
+router.get('/get-countcat',
+    categoriesController.countsubcategories
+);
+
+router.get('/get-subtocat/:category_id',
+    categoriesController.subcategorioncategori
 );
 
 module.exports = router;

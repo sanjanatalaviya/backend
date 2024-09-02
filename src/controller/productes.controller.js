@@ -361,6 +361,304 @@ const searchProductes = async (req, res) => {
     }
 }
 
+const productsByCategory = async (req, res) => {
+    const products = await Productes.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $unwind: {
+                path: "$category"
+            }
+        },
+        {
+            $project: {
+                name: 1,
+                "image.url": 1,
+                category: 1
+            }
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+    console.log(products);
+}
+
+const productsBySubcategory = async (req, res) => {
+    const products = await Productes.aggregate([
+        {
+            $lookup: {
+                from: "subcategories",
+                localField: "subcategori_id",
+                foreignField: "_id",
+                as: "subcategory"
+            }
+        },
+        {
+            $unwind: {
+                path: "$subcategory"
+            }
+        },
+        {
+            $project: {
+                "name": 1,
+                "image.url": 1,
+                "subcategory": 1
+            }
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+    console.log(products);
+}
+
+const toprated = async (req, res) => {
+    try {
+        const product = await Productes.aggregate(
+            [
+                {
+                    $sort: {
+                        rating: -1
+                    }
+                },
+                {
+                    $limit: 1
+                }
+            ]
+        );
+        res.status(200).json({
+            success: true,
+            data: product,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+
+        });
+    }
+};
+
+const arrivals = async (req, res) => {
+    try {
+        const product = await Productes.aggregate(
+            [
+                {
+                    $sort: { createdAt: -1 }
+                },
+                {
+                    $limit: 1
+                }
+            ]
+        );
+        res.status(200).json({
+            success: true,
+            data: product,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
+const discount = async (req, res) => {
+    try {
+        const product = await Productes.aggregate(
+            [
+                {
+                    $match: {
+                        isActive: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "category_id",
+                        foreignField: "_id",
+                        as: "category"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "subcategories",
+                        localField: "subcategory_id",
+                        foreignField: "_id",
+                        as: "subcategory"
+                    }
+                },
+                {
+                    $unwind: "$category"
+                },
+                {
+                    $unwind: "$subcategory"
+                },
+                {
+                    $group: {
+                        _id: {
+                            category_id: "$category_id",
+                            subcategory_id: "$subcategory_id"
+                        },
+                        category_name: { $first: "$category.name" },
+                        subcategory_name: {
+                            $first: "$subcategory.name"
+                        },
+                        products: {
+                            $push: {
+                                _id: "$_id",
+                                name: "$name",
+                                description: "$description",
+                                price: "$price",
+                                stock: "$stock"
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        category_id: "$_id.category_id",
+                        subcategory_id: "$_id.subcategory_id",
+                        category_name: 1,
+                        subcategory_name: 1,
+                        products: 1
+                    }
+                }
+            ]
+        );
+        res.status(200).json({
+            success: true,
+            message: "Product fetched sucessfully",
+            data: product
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Intenal server error." + error.message
+        })
+    }
+}
+
+const count = async (req, res) => {
+    try {
+        const product = await Productes.aggregate(
+            [
+                {
+                    $group: {
+                        _id: "$category_id",
+                        count: { $sum: 1 }
+                    }
+                }
+            ]
+        );
+        res.status(200).json({
+            success: true,
+            message: "Product fetched sucessfully",
+            data: product
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Intenal server error." + error.message
+        })
+    }
+}
+
+const outofstock = async (req, res) => {
+    console.log("ok");
+
+    const outofstock = await Productes.aggregate([
+        ({
+            $match: {
+                isActive: true
+            }
+        },
+        {
+            $lookup: {
+                from: "variants",
+                localField: "_id",
+                foreignField: "product_id",
+                as: "variants"
+            }
+        },
+        {
+            $match: {
+                variants: { $size: 0 }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                description: 1,
+                price: 1,
+                stock: 1
+            }
+        })
+    ]
+    )
+    res.status(200).json({
+        success: true,
+        message: 'product fetch successfully.',
+        data: outofstock
+    })
+    console.log(outofstock);
+}
+
+const variantsDatils = async (req, res) => {
+    const variantsDatils = await Productes.aggregate(
+        [
+            {
+                $lookup: {
+                    from: "variants",
+                    localField: "_id",
+                    foreignField: "product_id",
+                    as: "variants"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$variants",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    description: 1,
+                    price: 1,
+                    stock: 1,
+                    variants: {
+                        _id: "$variants._id",
+                        variant_name: "$variants.name",
+                        variant_price: "$variants.price",
+                        variant_stock: "$variants.stock",
+                        variant_details: "$variants.details"
+                    }
+                }
+            }
+        ]
+    )
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: variantsDatils
+    })
+}
+
 module.exports = {
     listProductes,
     getProductes,
@@ -368,5 +666,14 @@ module.exports = {
     updateProductes,
     deleteProductes,
     getproBySub,
-    searchProductes
+    searchProductes,
+    productsByCategory,
+    productsBySubcategory,
+    toprated,
+    arrivals,
+    discount,
+    count,
+    outofstock,
+    variantsDatils
+
 }

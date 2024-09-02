@@ -31,4 +31,24 @@ router.get('/getsubByCategory/:category_id',
     subcategoriesController.getsubByCategory
 );
 
+router.get('/get-subactive',
+    subcategoriesController.Active
+);
+
+router.get('/get-highest',
+    subcategoriesController.highest
+);
+
+router.get('/parent-of-subcategory',
+    subcategoriesController.parentOfSubcategory
+);
+
+router.get('/get-subInactive',
+    subcategoriesController.Inactive
+);
+
+router.get('/get-countcat',
+    subcategoriesController.countsubcategories
+);
+
 module.exports = router;

@@ -8,15 +8,15 @@ const ordersSchema = new mongoose.Schema(
         },
         discount: {
             type: Number,
-            required: true
+            // required: true
         },
         status: {
             type: Boolean,
-            required: true
+            // required: true
         },
         shipping_amount: {
             type: Number,
-            required: true
+            // required: true
         },
         isActive: {
             type: Boolean,

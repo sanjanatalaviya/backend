@@ -8,42 +8,35 @@ const { varifyaccesRefTokan } = require('../../../controller/users.controller');
 
 const router = express.Router();
 
-router.post(
-    '/register',
+router.post('/register',
     upload.single('avatar'),
     usersController.register
 );
 
-router.post(
-    '/registerOTP',
+router.post('/registerOTP',
     sendOTP,
     usersController.registerOTP
 );
 
-router.post(
-    '/login',
+router.post('/login',
     usersController.login
 );
 
-router.post(
-    '/newToken',
+router.post('/newToken',
     usersController.newToken
 );
 
-router.post(
-    '/logout',
+router.post('/logout',
     usersController.logout
 );
 
-router.post(
-    '/sendemail',
+router.post('/sendemail',
     usersController.register
-)
+);
 
-router.get(
-    '/checkAuth',
+router.get('/checkAuth',
     usersController.checkAuth
-)
+);
 
 router.get('/googleLogin',
     passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -97,15 +90,33 @@ router.get('/facebook/callback',
         res.send("<h1>OK</h1>");
     });
 
-router.get(
-    '/pdfmake',
+router.get('/pdfmake',
     exportpdfmake
-)
+);
 
-router.get(
-    '/sendotp',
+router.get('/sendotp',
     verifyOTP,
     usersController.registerOTP
+);
+
+router.get('/list-user',
+    usersController.listuser
+);
+
+router.get('/get-user/:_id',
+    usersController.getuser
+);
+
+router.get('/order/:_id',
+    usersController.orderofuser
+);
+
+router.put('/update-user/:_id',
+    usersController.updateUser
+)
+
+router.delete('/delete-user/:_id',
+    usersController.deleteUser
 )
 
 module.exports = router;

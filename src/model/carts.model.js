@@ -1,48 +1,79 @@
 const mongoose = require('mongoose');
 
 const itemsSchema = new mongoose.Schema(
+    
     {
-        name: {
-            type: String,
-            required: true
+        product_id: {
+            type: mongoose.Types.ObjectId,
+            ref: "Productes",
+            required: true,
         },
-        value: {
-            type: String,
-            required: true
-        }
+        quantity: {
+            type: Number,
+            required: true,
+            default: 1,
+        },
     }
 )
 
+// {
+    //     name: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     value: {
+    //         type: String,
+    //         required: true
+    //     }
+    // }
+
 const cartsSchema = new mongoose.Schema(
     {
-        category_id: {
+        user_id: {
             type: mongoose.Types.ObjectId,
-            ref: 'Categories',
-            required: true
-        },
-        name: {
-            type: String,
+            ref: "Users",
             required: true,
-            trim: true,
-            unique: true,
-            lowercase: true
         },
-        desciption: {
-            type: String,
-            required: true,
-            trim: true
-        },
+        itemsSchema: [itemsSchema],
         isActive: {
             type: Boolean,
-            default: true
+            default: true,
         },
-        itemsSchema: [itemsSchema]
     },
     {
         timestamps: true,
-        versionKey: false
+        versionKey: false,
     }
 )
 
 const Carts = mongoose.model("Carts", cartsSchema);
 module.exports = Carts;
+
+// {
+    //     user_id: {
+    //         type: mongoose.Types.ObjectId,
+    //         ref: 'Users',
+    //         required: true
+    //     },
+    //     name: {
+    //         type: String,
+    //         required: true,
+    //         trim: true,
+    //         unique: true,
+    //         lowercase: true
+    //     },
+    //     description: {
+    //         type: String,
+    //         required: true,
+    //         trim: true
+    //     },
+    //     isActive: {
+    //         type: Boolean,
+    //         default: true
+    //     },
+    //     itemsSchema: [itemsSchema]
+    // },
+    // {
+    //     timestamps: true,
+    //     versionKey: false
+    // }

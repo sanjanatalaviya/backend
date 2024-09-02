@@ -9,3 +9,11 @@ module.exports.variantsController = require('./variants.controller');
 module.exports.salespeopleController = require('./salespeople.controller');
 
 module.exports.usersController = require('./users.controller');
+
+module.exports.ratingController = require('./rating.controller');
+
+module.exports.orderController = require('./order.controller');
+
+module.exports.paymentController = require('./payment.controller');
+
+module.exports.cartController = require('./cart.controller');

@@ -1,9 +1,12 @@
 const Joi = require("joi")
 
 const getCategory = {
-    query: Joi.object().keys({
-        cat_id: Joi.string().required()
+    params: Joi.object().keys({
+        category_id: Joi.string().required()
     })
+    // query: Joi.object().keys({
+    //     cat_id: Joi.string().required()
+    // })
 }
 
 const createCategory = {
