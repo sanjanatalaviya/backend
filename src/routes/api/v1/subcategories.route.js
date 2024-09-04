@@ -39,7 +39,7 @@ router.get('/get-highest',
     subcategoriesController.highest
 );
 
-router.get('/parent-of-subcategory',
+router.get('/parent-of-subcategory/:category_id',
     subcategoriesController.parentOfSubcategory
 );
 

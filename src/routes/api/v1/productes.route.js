@@ -70,4 +70,8 @@ router.get('/variant-details/:product_id',
     productesController.variantsDatils
 );
 
+router.get('/searchByName',
+    productesController.searchByName
+);
+
 module.exports = router;

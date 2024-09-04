@@ -100,13 +100,28 @@ const addCart = async (req, res) => {
 
 const deleteCart = async (req, res) => {
     try {
-        const cart = await Carts.findByIdAndDelete(req.params._id);
+        const { _id, product_id } = req.params;
+        const cart = await Carts.findById({ _id });
+        // const cart = await Carts.findByIdAndDelete(req.params.cart_id,
+        //     req.params.product_id
+        // );
+
         if (!cart) {
             res.status(404).json({
                 success: false,
                 message: "cart data is not found."
             })
         }
+        const itemIndex = cart.itemsSchema.findIndex(item => item.product_id.toString() === product_id);
+        if (itemIndex === -1) {
+            res.status(404).json({
+                success: false,
+                message: "product is not found in cart."
+            })
+        }
+        cart.itemsSchema.splice(itemIndex, 1);
+        await cart.save();
+
         res.status(201).json({
             success: true,
             message: "cart deleted successfully.",

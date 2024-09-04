@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Subcategories = require("../model/subcategories.model")
 
 const listSubcategory = async (req, res) => {
@@ -211,28 +212,44 @@ const highest = async (req, res) => {
 }
 
 const parentOfSubcategory = async (req, res) => {
-    const subcategory = await Subcategories.aggregate([
-        {
-            $lookup: {
-                from: "categories",
-                localField: "category_id",
-                foreignField: "_id",
-                as: "category"
+    try {
+        const { category_id } = req.params;
+
+        const subcategory = await Subcategories.aggregate([
+            {
+                $match: { category_id: new mongoose.Types.ObjectId(category_id) } // Use the dynamic category_id
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category_id",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $project: {
+                    "name": 1,
+                    "category": 1
+                }
             }
-        },
-        {
-            $project: {
-                "name": 1,
-                "category": 1
-            }
-        }
-    ])
-    res.status(200).json({
-        success: true,
-        message: "Active subcategory data fetched successfully.",
-        data: subcategory
-    })
-    console.log(subcategory);
+        ]);
+        res.status(200).json({
+            success: true,
+            message: "Subcategory data fetched successfully.",
+            data: subcategory
+        });
+        console.log(subcategory);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching subcategory data.",
+            error: error.message
+        });
+    }
 }
 
 const Inactive = async (req, res) => {

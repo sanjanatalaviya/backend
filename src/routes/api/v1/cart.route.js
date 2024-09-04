@@ -19,7 +19,7 @@ router.put('/update-cart/:_id',
     cartController.updateCart
 );
 
-router.delete('/delete-cart/:_id',
+router.delete('/delete-cart/:_id/:product_id',
     cartController.deleteCart
 );
 

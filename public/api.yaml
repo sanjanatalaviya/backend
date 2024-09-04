@@ -614,12 +614,16 @@ paths:
                   message:
                     type: string
                     description: Error message explaining the issue.
-  /subcategories/parent-of-subcategory:
+  /subcategories/parent-of-subcategory/{category_id}:
     get:
       summary: Returns a count of Inactive subcategories.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Subcategory
+      parameters:
+        - in: path
+          name: category_id
+          required: true
       responses:
         '200':
           description: The count of active subcategories.
@@ -790,7 +794,66 @@ paths:
 
 
 
-
+  /productes/searchByName:
+    get:
+      summary: Search Products by Name
+      description: Retrieve products based on the name provided in the query parameter.
+      tags:
+        - Productes
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Products successfully fetched.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Products fetched successfully"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        price:
+                          type: number
+                        image:
+                          type: object
+                          properties:
+                            public_id:
+                              type: string
+                            url:
+                              type: string
+                        isActive:
+                          type: boolean
+        '500':
+          description: Error fetching products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to fetch products"
   /productes/variant-details/{product_id}:
     get:
       parameters:
@@ -968,9 +1031,9 @@ paths:
             description: Productes successfully.
           '404':
             description: Productes not found. 
-  /productes/search-productes:
+  /products/search-productes:
     get:
-      summary: Get Productes
+      summary: Search Productes
       description: Retrieve a list of Productes based on query parameters.
       tags:
         - Productes
@@ -982,7 +1045,7 @@ paths:
             enum: [asc, desc]
           description: The sort order of the products.
         - in: query
-          name: cart
+          name: rating
           schema:
             type: integer
             format: int32
@@ -2043,7 +2106,7 @@ paths:
           description: cart successfully get data.
         '404':
           description: cart not found. 
-  /cart/delete-cart/{_id}:
+  /cart/delete-cart/{_id}/{product_id}:
     delete:
       summary: Delete a cart
       description: Remove a specific cart from the list.
@@ -2052,6 +2115,11 @@ paths:
       parameters:
         - in: path
           name: _id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: product_id
           required: true
           schema:
             type: string
