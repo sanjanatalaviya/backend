@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Rating = require("../model/rating.model");
 
 const listRating = async (req, res) => {
@@ -201,6 +202,84 @@ const NoReviews = async (req, res) => {
     });
 }
 
+const approveReviews = async (req, res) => {
+    const { _id, status } = req.params;
+
+    const isApproved = status === 'approved' ? true : status === 'disapproved' ? false : null;
+
+    if (isApproved === null) {
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid status. Use "approve" or "disapprove".'
+        });
+    }
+    const result = await Rating.updateOne(
+        { _id: new mongoose.Types.ObjectId(_id) },
+        { $set: { isApproved: isApproved } }
+    );
+
+    if (result.matchedCount === 0) {
+        return res.status(404).json({
+            success: false,
+            message: 'Review not found.',
+        });
+    }
+    res.status(200).json({
+        success: true,
+        message: `Review ${status} successfully`,
+        data: result
+    })
+    console.log(result);
+}
+
+const reviewofuser = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const reviews = await Rating.aggregate([
+            {
+                $match: {
+                    user_id: new mongoose.Types.ObjectId(user_id)
+                }
+            }
+        ]
+        )
+        res.status(200).json({
+            success: true,
+            message: "reviews get  succesfully",
+            data: reviews
+        })
+
+        console.log(reviews);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const reviewofproduct = async (req, res) => {
+    const { product_id } = req.params;
+    try {
+        const reviews = await Rating.aggregate([
+            {
+                $match: {
+                    product_id: new mongoose.Types.ObjectId(product_id)
+                }
+            }
+        ]);
+        res.status(200).json({
+            success: true,
+            message: 'Reviews fetched successfully.',
+            data: reviews
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching reviews.',
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     listRating,
     getRating,
@@ -210,5 +289,8 @@ module.exports = {
     countProduct,
     topratedproducts,
     includecomments,
-    NoReviews
+    NoReviews,
+    approveReviews,
+    reviewofuser,
+    reviewofproduct
 }

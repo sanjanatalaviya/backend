@@ -1771,7 +1771,57 @@ paths:
                     type: string  
         '404':
           description: Rating not found
-
+  /rating/approveReviews/{_id}:
+    get:
+      summary: Get a Rating
+      description: Remove a specific Rating from the list.
+      tags:
+        - Rating
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rating successfully get data.
+        '404':
+          description: Rating not found.
+  /rating/reviewofuser/{user_id}:
+    get:
+      summary: Get a Rating
+      description: Remove a specific Rating from the list.
+      tags:
+        - Rating
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rating successfully get data.
+        '404':
+          description: Rating not found.
+  /rating/reviewofproduct/{product_id}:
+    get:
+      summary: Get a Rating
+      description: Remove a specific Rating from the list.
+      tags:
+        - Rating
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rating successfully get data.
+        '404':
+          description: Rating not found.
 
 
 

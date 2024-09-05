@@ -31,12 +31,24 @@ router.get('/top-rated-products',
     ratingController.topratedproducts
 );
 
+router.get('/approveReviews/:_id',
+    ratingController.approveReviews
+)
+
 router.get('/with-comments',
     ratingController.includecomments
 );
 
 router.get('/no-reviews',
     ratingController.NoReviews
-)
+);
+
+router.get('/reviewofuser/:user_id',
+    ratingController.reviewofuser
+);
+
+router.get('/reviewofproduct/:product_id',
+    ratingController.reviewofproduct
+);
 
 module.exports = router;
