@@ -26,10 +26,6 @@ router.delete('/delete-variant/:variant_id',
     variantsController.deleteVariant
 );
 
-router.get('/varianbypro/:product_id',
-    variantsController.variantbypro
-);
-
 router.get('/countstock/:product_id',
     variantsController.countstock
 );
@@ -50,7 +46,7 @@ router.get('/productswithhighesprices',
     variantsController.productswithhighesprices
 );
 
-router.get('/variantparticularproduct',
+router.get('/variantparticularproduct/:product_id',
     variantsController.variantparticularproduct
 );
 

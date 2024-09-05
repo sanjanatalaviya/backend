@@ -165,48 +165,14 @@ const deleteVariant = async (req, res) => {
     }
 }
 
-const variantbypro = async (req, res) => {
-    const { product_id } = req.params;
-    try {
-        const variantbypro = await Variants.aggregate([
-            {
-                $match: {
-                    _id: new mongoose.Types.ObjectId(product_id)
-                }
-            },
-            {
-                $lookup: {
-                    from: "productes",
-                    localField: "_id",
-                    foreignField: "product_id",
-                    as: "productes"
-                }
-            },
-            {
-                $project: {
-                    _id: 1,
-                    category_name: "$name",
-                    productes: "$productes"
-                }
-            }
-        ]);
-        res.status(200).json({
-            success: true,
-            data: variantbypro[0],
-            message: "productes retrieved successfully."
-        });
-        console.log(variantbypro);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "An error occurred while retrieving productes.",
-            error: error.message
-        });
-    }
-}
-
 const countstock = async (req, res) => {
+    const { product_id } = req.params;
     const variants = await Variants.aggregate([
+        {
+            $match: {
+                product_id: new mongoose.Types.ObjectId(product_id)
+            }
+        },
         {
             $group: {
                 _id: "$product_id",
@@ -418,6 +384,9 @@ const productswithhighesprices = async (req, res) => {
             $sort: {
                 highestPrice: -1
             }
+        },
+        {
+            $limit: 2
         }
     ])
     res.status(200).json({
@@ -429,7 +398,13 @@ const productswithhighesprices = async (req, res) => {
 }
 
 const variantparticularproduct = async (req, res) => {
+    const { product_id } = req.params;
     const variants = await Variants.aggregate([
+        {
+            $match: {
+                product_id: new mongoose.Types.ObjectId(product_id)
+            }
+        },
         {
             $lookup: {
                 from: "productes",
@@ -467,8 +442,8 @@ const variantparticularproduct = async (req, res) => {
     ])
     res.status(200).json({
         success: true,
-        message: "variant get  succesfully",
-        data: variants
+        data: variants,
+        message: "variant get  succesfully"
     })
     console.log(variants);
 }
@@ -554,7 +529,6 @@ module.exports = {
     addVariant,
     updateVariant,
     deleteVariant,
-    variantbypro,
     countstock,
     productslowstock,
     countproduct,

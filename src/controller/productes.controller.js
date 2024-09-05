@@ -636,7 +636,42 @@ const outofstock = async (req, res) => {
     console.log(outofstock);
 }
 
-const variantsDatils = async (req, res) => {
+const variantsDatils = async (req, res) => { //baki
+    // [
+    //     {
+    //         $match: {
+    //             product_id: new mongoose.Types.ObjectId(product_id)
+
+    //         }
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "variants",
+    //             localField: "_id",
+    //             foreignField: "product_id",
+    //             as: "variants"
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$variants"
+    //     },
+    //     {
+    //         $project: {
+    //             _id: 1,
+    //             name: 1,
+    //             description: 1,
+    //             price: 1,
+    //             stock: 1,
+    //             variants: {
+    //                 _id: "$variants._id",
+    //                 variant_name: "$variants.name",
+    //                 variant_price: "$variants.price",
+    //                 variant_stock: "$variants.stock",
+    //                 variant_details: "$variants.details"
+    //             }
+    //         }
+    //     }
+    // ]
     const variantsDatils = await Productes.aggregate(
         [
             {

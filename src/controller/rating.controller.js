@@ -139,28 +139,12 @@ const topratedproducts = async (req, res) => {
     const Ratinge = await Rating.aggregate(
         [
             {
-                $lookup: {
-                    from: "productes",
-                    localField: "product_id",
-                    foreignField: "_id",
-                    as: "product_details"
-                }
-            },
-            {
-                $unwind: "$product_details"
-            },
-            {
-                $group: {
-                    _id: "$product_id",
-                    product_name: {
-                        $first: "$product_details.name"
-                    }
-                }
-            },
-            {
                 $sort: {
                     average_rating: -1
                 }
+            },
+            {
+                $limit: 1
             }
         ]
     )
@@ -175,10 +159,10 @@ const includecomments = async (req, res) => {
     const review = await Rating.aggregate(
         [
             {
-                "$match": {
-                    "comment": {
-                        "$exists": true,
-                        "$ne": ""
+                $match: {
+                    review: {
+                        $exists: true,
+                        $ne: ""
                     }
                 }
             }
@@ -196,15 +180,16 @@ const NoReviews = async (req, res) => {
         [
             {
                 $lookup: {
-                    from: 'review',
-                    localField: '_id',
-                    foreignField: 'product_id',
-                    as: 'review'
+                    from: "ratings",
+                    localField: "_id",
+                    foreignField: "product_id",
+                    as: "rating"
                 }
             },
             {
                 $match: {
-                    review: { $size: 0 }
+                    rating: { $size: 0 }
+                    // rating: { $eq: [] }
                 }
             }
         ]
