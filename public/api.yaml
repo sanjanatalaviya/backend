@@ -21,6 +21,7 @@ paths:
 
 
 
+
   /users/delete-user/{_id}:
     delete:
       summary: Delete a Users
@@ -791,6 +792,7 @@ paths:
           description: Subcategory successfully deleted.
         '404':
           description: Subcategory not found.
+
 
 
 
@@ -1692,27 +1694,34 @@ paths:
       summary: Add Rating
       description: Add a new rating with essential details including an image.
       tags:
-      - Rating
+        - Rating
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
                 product_id:
                   type: string
+                  description: The ID of the product being rated.
                 user_id:
                   type: string
+                  description: The ID of the user providing the rating.
                 rating:
                   type: number
+                  description: The rating value.
                 review:
-                  type: string            
+                  type: string
+                  description: The text review of the product.
+              required:
+                - product_id
+                - user_id
+                - rating
+                - review
       responses:
         '201':
           description: Created
-        '200':
-          description: The added rating details
           content:
             application/json:
               schema:
@@ -1726,6 +1735,31 @@ paths:
                     type: number
                   review:
                     type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
   /rating/update-rating/{_id}:
     put:
       summary: Update Rating
@@ -1771,23 +1805,45 @@ paths:
                     type: string  
         '404':
           description: Rating not found
-  /rating/approveReviews/{_id}:
+  /rating/approveReviews/{status}/{_id}:
     get:
-      summary: Get a Rating
-      description: Remove a specific Rating from the list.
-      tags:
-        - Rating
       parameters:
-        - in: path
+        - name: status
+          in: path
+          name: status
+          required: true
+          schema:
+            type: string
+          enum: [approved, disapproved]  
+          description: Approve or disapprove the review. Use 'approve' to approve, 'disapprove' to disapprove.
+        - name: _id
+          in: path
           name: _id
           required: true
           schema:
             type: string
+          description: ID of the review to approve or disapprove.
+      summary: Approve or disapprove a review.
+      description: Approve or disapprove a review based on the status parameter.
+      tags:
+        - Rating
       responses:
-        '200':
-          description: Rating successfully get data.
-        '404':
-          description: Rating not found.
+        '200':    # status code
+          description: Review status updated successfully.
+          content:
+            application/json:
+              schema: 
+                type: object
+              properties:
+                success:
+                  type: boolean
+                  description: Indicates if the operation was successful.
+                message:
+                  type: string
+                  description: A message describing the result.
+                data:
+                  type: object
+                  description: Data containing information about the operation.
   /rating/reviewofuser/{user_id}:
     get:
       summary: Get a Rating
@@ -1825,6 +1881,21 @@ paths:
 
 
 
+  /order/cancel:
+    get:
+      summary: cancel orders.
+      description: Optional extended description in CommonMark or HTML.
+      tags:
+        - Orders
+      responses:
+        '200':    # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
   /order/list-order:
       get:
         summary: List the order
@@ -1875,44 +1946,123 @@ paths:
         '404':
           description: order not found.
   /order/add-order:
-    post:
-      summary: Add order
-      description: Add a new order with essential details including an image.
-      tags:
-      - Orders
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                amount:
-                  type: number
-                discount:
-                  type: number
-                status:
-                  type: string
-                shipping_amount:
-                  type: string            
-      responses:
-        '201':
-          description: Created
-        '200':
-          description: The added order details
+      post:
+        summary: Add order
+        description: Add a new order with essential details including associated products.
+        tags:
+          - Orders
+        requestBody:
+          required: true
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  user_id:
+                    type: string
+                    description: The ID of the user placing the order
+                  payment_id:
+                    type: string
+                    description: The ID of the payment method used
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                          description: The ID of the product
+                        quantity:
+                          type: integer
+                          description: The quantity of the product
+                  shipping_address:
+                    type: string
+                    description: The shipping address for the order
                   amount:
                     type: number
+                    format: float
+                    description: The base amount of the order
                   discount:
                     type: number
+                    format: float
+                    description: The discount applied to the order
+                  total_amount:
+                    type: number
+                    format: float
+                    description: The total amount of the order after applying the discount
                   status:
                     type: string
+                    description: The status of the order
                   shipping_amount:
-                    type: string
+                    type: number
+                    format: float
+                    description: The shipping amount for the order
+        responses:
+          '201':
+            description: Order created successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: true
+                    message:
+                      type: string
+                      example: Order added successfully.
+                    data:
+                      type: object
+                      properties:
+                        user_id:
+                          type: string
+                          example: "64f4b5e0c2d6f40004c6f2b8"
+                        seller_id:
+                          type: string
+                          example: "64f4b5e0c2d6f40004c6f2c0"
+                        payment_id:
+                          type: string
+                          example: "64f4b5e0c2d6f40004c6f2b9"
+                        products:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              product_id:
+                                type: string
+                                example: "64f4b5e0c2d6f40004c6f2ba"
+                              quantity:
+                                type: integer
+                                example: 2
+                              _id:
+                                type: string
+                                example: "66da7b6db4dd5f26975266ad"
+                        shipping_address:
+                          type: string
+                          example: "123 Elm Street, Springfield, IL, 62701"
+                        amount:
+                          type: number
+                          format: float
+                          example: 150.0
+                        discount:
+                          type: number
+                          format: float
+                          example: 20.0
+                        total_amount:
+                          type: number
+                          format: float
+                          example: 130.0
+                        status:
+                          type: string
+                          example: true
+                        shipping_amount:
+                          type: number
+                          format: float
+                          example: 10.0
+          '400':
+            description: Bad request, missing required fields
+          '500':
+            description: Internal server error
   /order/update-order/{_id}:
     put:
       summary: Update Rating
@@ -1958,6 +2108,57 @@ paths:
                     type: string  
         '404':
           description: order not found
+  /order/seller/{seller_id}:
+    get:
+      summary: Get a order
+      description: Remove a specific order from the list.
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: seller_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: order successfully get data.
+        '404':
+          description: order not found.
+  /order/user/{user_id}:
+    get:
+      summary: Get a order
+      description: Remove a specific order from the list.
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: order successfully get data.
+        '404':
+          description: order not found.
+  /order/product/{product_id}:
+    get:
+      summary: Get a order
+      description: Remove a specific order from the list.
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: order successfully get data.
+        '404':
+          description: order not found.
 
 
 
@@ -2036,7 +2237,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:

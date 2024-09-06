@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Payments = require("../model/payments.model");
 
 const listPayment = async (req, res) => {
@@ -112,32 +113,37 @@ const updatePayment = async (req, res) => {
 }
 
 const Paymentdetailsorder = async (req, res) => {
+    const { order_id } = req.params;
     const payment = await Payments.aggregate(
         [
             {
+                $match: {
+                    order_id: new mongoose.Types.ObjectId(order_id)
+                }
+            },
+            {
                 $lookup: {
                     from: "payments",
-                    localField: "_id",      
-                    foreignField: "_id", 
-                    as: "paymentDetails"     
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "paymentDetails"
                 }
             },
             {
                 $unwind: {
-                    path: "$paymentDetails", 
-                    preserveNullAndEmptyArrays: true 
+                    path: "$paymentDetails",
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
                 $project: {
                     _id: 1,
                     order_id: 1,
-                    gateway: "$paymentDetails.gateway",
+                    gateway: "$paymentDetails.type",
                     status: "$paymentDetails.status",
                 }
             }
         ]
-
     )
     res.status(200).json({
         success: true,

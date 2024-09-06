@@ -23,4 +23,20 @@ router.delete('/delete-order/:_id',
     orderController.deleteOrder
 );
 
+router.get("/seller/:seller_id",
+    orderController.seller
+);
+
+router.get('/cancel',
+    orderController.cancel
+);
+
+router.get('/user/:user_id',
+    orderController.user
+);
+
+router.get('/product/:product_id',
+    orderController.product
+)
+
 module.exports = router;

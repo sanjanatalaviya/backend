@@ -47,18 +47,26 @@ const getRating = async (req, res) => {
 
 const addRating = async (req, res) => {
     try {
-        const rating = await Rating.create({ ...req.body });
-        if (!rating) {
-            res.status(400).json({
-                success: true,
-                message: "failed to added rating",
-                data: rating,
+        const { product_id, user_id, rating, review } = req.body;
+
+        if (!product_id || !user_id || rating === undefined || !review) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required fields",
             });
         }
+
+        const newRating = await Rating.create({
+            product_id,
+            user_id,
+            rating,
+            review,
+        });
+
         res.status(201).json({
             success: true,
-            message: "rating added successfully",
-            data: rating,
+            message: "Rating added successfully",
+            data: newRating,
         });
     } catch (error) {
         res.status(500).json({
@@ -66,7 +74,8 @@ const addRating = async (req, res) => {
             message: "Internal server error: " + error.message,
         });
     }
-}
+};
+
 
 const deleteRating = async (req, res) => {
     try {
@@ -210,7 +219,7 @@ const approveReviews = async (req, res) => {
     if (isApproved === null) {
         return res.status(400).json({
             success: false,
-            message: 'Invalid status. Use "approve" or "disapprove".'
+            message: 'Invalid status. Use "approved" or "disapproved".'
         });
     }
     const result = await Rating.updateOne(

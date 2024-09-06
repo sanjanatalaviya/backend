@@ -31,9 +31,9 @@ router.get('/top-rated-products',
     ratingController.topratedproducts
 );
 
-router.get('/approveReviews/:_id',
+router.get('/approveReviews/:status/:_id',
     ratingController.approveReviews
-)
+);
 
 router.get('/with-comments',
     ratingController.includecomments
