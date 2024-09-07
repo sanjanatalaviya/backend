@@ -82,7 +82,7 @@ paths:
           schema:
             type: string
           required: true
-          description: get users.
+          description: get order from users.
       summary: get users.
       description: Optional extended description in CommonMark or HTML.
       tags:
@@ -429,7 +429,7 @@ paths:
                     description: Error message explaining the issue.
   /categories/get-highpro:
     get:
-      summary: Returns a count of active categories.
+      summary: Returns a count of highest categories productes.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Category
@@ -456,7 +456,7 @@ paths:
                     description: Error message explaining the issue.
   /categories/get-subtocat/{category_id}:
     get:
-      summary: category in a specific category.
+      summary: subcategory of a specific category.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Category
@@ -478,7 +478,7 @@ paths:
                     description: The number of active categories.
   /categories/get-countcat:
     get:
-      summary: Returns a count of active categories.
+      summary: Returns a count categories.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Category
@@ -505,7 +505,7 @@ paths:
                     description: Error message explaining the issue.
   /categories/get-avgpro:
     get:
-      summary: Returns a count of active categories.
+      summary: get average of categories.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Category
@@ -536,7 +536,7 @@ paths:
 
   /subcategories/get-countcat:
     get:
-      summary: Returns a count of Inactive subcategories.
+      summary: Returns a count of subcategories.
       description: Retrieves the number of subcategories that are currently active in the system.
       tags:
         - Subcategory
@@ -590,7 +590,7 @@ paths:
                     description: Error message explaining the issue.
   /subcategories/get-highest:
     get:
-      summary: Returns a count of active Subcategory.
+      summary: Get highest Subcategory.
       description: Retrieves the number of Subcategory that are currently active in the system.
       tags:
         - Subcategory
@@ -617,7 +617,7 @@ paths:
                     description: Error message explaining the issue.
   /subcategories/parent-of-subcategory/{category_id}:
     get:
-      summary: Returns a count of Inactive subcategories.
+      summary: Returns parent of subcategories through the category.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Subcategory
@@ -648,7 +648,7 @@ paths:
                     description: Error message explaining the issue.
   /subcategories/get-subactive:
     get:
-      summary: Returns a count of Inactive subcategories.
+      summary: Returns a count of active subcategories.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Subcategory
@@ -798,7 +798,7 @@ paths:
 
   /productes/searchByName:
     get:
-      summary: Search Products by Name
+      summary: Search Products by Name of productes.
       description: Retrieve products based on the name provided in the query parameter.
       tags:
         - Productes
@@ -865,7 +865,7 @@ paths:
             type: string
           required: true
           description: variant_details.
-      summary: get products.
+      summary: get productes variant Details.
       description: Optional extended description in CommonMark or HTML.
       tags:
         - Productes
@@ -880,7 +880,7 @@ paths:
                   type: string
   /productes/out-of-stock:
     get:
-      summary: recently added Productes.
+      summary: Productes which is out of stock.
       description: Retrieves the number of Productes that are currently active in the system.
       tags:
         - Productes
@@ -893,7 +893,7 @@ paths:
                 type: object
   /productes/count:
     get:
-      summary: Returns a count of active productes.
+      summary: Returns a count of productes.
       description: Retrieves the number of productes that are currently active in the system.
       tags:
         - Productes
@@ -920,7 +920,7 @@ paths:
                     description: Error message explaining the issue.
   /productes/discount:
     get:
-      summary: Returns a count of Inactive productes.
+      summary: Returns a count of productes which have a discount.
       description: Retrieves the number of productes that are currently active in the system.
       tags:
         - Productes
@@ -947,7 +947,7 @@ paths:
                     description: Error message explaining the issue.
   /productes/arrivals:
     get:
-      summary: Returns a count of Inactive productes.
+      summary: Returns productes which is new arrivals.
       description: Retrieves the number of productes that are currently active in the system.
       tags:
         - Productes
@@ -974,7 +974,7 @@ paths:
                     description: Error message explaining the issue.
   /productes/toprated:
     get:
-      summary: Returns a count of Inactive productes.
+      summary: Returns a count of productes which is top rated.
       description: Retrieves the number of productes that are currently active in the system.
       tags:
         - Productes
@@ -1001,7 +1001,7 @@ paths:
                     description: Error message explaining the issue.
   /productes/probysub/{subcategory_id}:
       get:
-        summary: Get a Productes
+        summary: Get a Productes by their Subcategory.
         description: Remove a specific productes from the list.
         tags:
           - Productes
@@ -1018,7 +1018,7 @@ paths:
             description: Productes not found. 
   /productes/productesbycat/{category_id}:
       get:
-        summary: Get a Productes
+        summary: Get a Productes by category.
         description: Remove a specific productes from the list.
         tags:
           - Productes
@@ -1035,7 +1035,7 @@ paths:
             description: Productes not found. 
   /products/search-productes:
     get:
-      summary: Search Productes
+      summary: Search the Productes
       description: Retrieve a list of Productes based on query parameters.
       tags:
         - Productes
@@ -1124,7 +1124,7 @@ paths:
                     type: string
   /productes/get-productes/{product_id}:
     get:
-      summary: Get a productes
+      summary: Get a specific productes
       description: Remove a specific Productes from the list.
       tags:
         - Productes
@@ -1276,7 +1276,7 @@ paths:
 
   /variants/productslowstock:
       get:
-        summary: List the Variants
+        summary: List the Variants which has low stock.
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1291,7 +1291,7 @@ paths:
                     type: string
   /variants/morethanonevariant:
       get:
-        summary: List the Variants
+        summary: List the Variants which has more than one variants.
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1306,7 +1306,7 @@ paths:
                     type: string
   /variants/get-variant/{variant_id}:
     get:
-      summary: Get a variants
+      summary: Get a specific variants
       description: Remove a specific variants from the list.
       tags:
         - Variants
@@ -1323,7 +1323,7 @@ paths:
           description: variants not found. 
   /variants/Variantdetails:
       get:
-        summary: List the Variants
+        summary: List the Variants details
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1338,7 +1338,7 @@ paths:
                     type: string
   /variants/activevarint:
       get:
-        summary: List the Variants
+        summary: List the active Variants
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1353,7 +1353,7 @@ paths:
                     type: string
   /variants/variantparticularproduct/{product_id}:
       get:
-        summary: List the Variants
+        summary: List the Variants of a particular productes.
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1373,7 +1373,7 @@ paths:
                     type: string
   /variants/productswithhighesprices:
       get:
-        summary: List the Variants
+        summary: List the Variants productes which has a high prices.
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1388,7 +1388,7 @@ paths:
                     type: string
   /variants/countproduct:
       get:
-        summary: List the Variants
+        summary: count the Variants
         description: Optional extended description in CommonMark or HTML.
         tags: 
         - Variants
@@ -1403,7 +1403,7 @@ paths:
                     type: string
   /variants/countstock/{product_id}:
     get:
-      summary: Get a variants
+      summary: count the stock of variants through the product id.
       description: Remove a specific variants from the list.
       tags:
         - Variants
@@ -1576,7 +1576,7 @@ paths:
 
   /rating/no-reviews:
     get:
-      summary: count of Rating for each product.
+      summary: count of Rating which has no reviews.
       description: Retrieves the number of rating that are currently active in the system.
       tags:
         - Rating
@@ -1608,7 +1608,7 @@ paths:
                   type: string
   /rating/top-rated-products:
     get:
-      summary: count of Rating for each product.
+      summary: count of Rating for top rated product.
       description: Retrieves the number of rating that are currently active in the system.
       tags:
         - Rating
@@ -1625,7 +1625,7 @@ paths:
                     description: count of rating for each product.
   /rating/count-products:
     get:
-      summary: count of reviews for each rating.
+      summary: get the reviews of productes.
       description: Retrieves the number of categories that are currently active in the system.
       tags:
         - Rating
@@ -1845,7 +1845,7 @@ paths:
                   description: Data containing information about the operation.
   /rating/reviewofuser/{user_id}:
     get:
-      summary: Get a Rating
+      summary: Get a Rating of a user.
       description: Remove a specific Rating from the list.
       tags:
         - Rating
@@ -1862,7 +1862,7 @@ paths:
           description: Rating not found.
   /rating/reviewofproduct/{product_id}:
     get:
-      summary: Get a Rating
+      summary: Get a review of productes.
       description: Remove a specific Rating from the list.
       tags:
         - Rating
@@ -1882,7 +1882,7 @@ paths:
 
   /order/cancel:
     get:
-      summary: cancel orders.
+      summary: get the cancel orders.
       description: Optional extended description in CommonMark or HTML.
       tags:
         - Orders
@@ -2064,7 +2064,7 @@ paths:
             description: Internal server error
   /order/update-order/{_id}:
     put:
-      summary: Update Rating
+      summary: Update order
       description: Update an existing order with essential details.
       tags:
       - Orders
@@ -2109,7 +2109,7 @@ paths:
           description: order not found
   /order/seller/{seller_id}:
     get:
-      summary: Get a order
+      summary: Get a order of seller.
       description: Remove a specific order from the list.
       tags:
         - Orders
@@ -2126,7 +2126,7 @@ paths:
           description: order not found.
   /order/user/{user_id}:
     get:
-      summary: Get a order
+      summary: Get a order of user.
       description: Remove a specific order from the list.
       tags:
         - Orders
@@ -2143,7 +2143,7 @@ paths:
           description: order not found.
   /order/product/{product_id}:
     get:
-      summary: Get a order
+      summary: Get a order of specific productes.
       description: Remove a specific order from the list.
       tags:
         - Orders
@@ -2163,7 +2163,7 @@ paths:
 
   /payment/order/{order_id}:
     get:
-      summary: Get a payment Order
+      summary: Get a payment of specific Order.
       description: Remove a specific payment from the list.
       tags:
         - Payments
@@ -2363,7 +2363,7 @@ paths:
           description: cart not found.
   /cart/add-cart:
     post:
-      summary: Add a new cart
+      summary: Add to cart
       description: Add a new cart with essential details including items.
       tags:
         - Carts
