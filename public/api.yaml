@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:8000/api/v1
     description: Local Server
-  - url: http://example.com
+  - url: https://backend-d4jv.vercel.app/api/v1
   # - url: https://backend-d4jv.vercel.app/api/docs
     description: Optional server description, e.g. Internal staging server for testing
 components:
@@ -1759,7 +1759,6 @@ paths:
                     type: boolean
                   message:
                     type: string
-
   /rating/update-rating/{_id}:
     put:
       summary: Update Rating
