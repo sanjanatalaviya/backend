@@ -228,8 +228,8 @@ const logout = async (req, res) => {
                 new: true
             }
         );
-        // if (user) {
-        if (!user) {
+        if (user) {
+            // if (!user) {
             return res.status(400).json({
                 success: false,
                 message: 'User not logged In.'
