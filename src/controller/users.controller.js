@@ -2,6 +2,7 @@ const Users = require("../model/users.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require("../utils/Nodemailer");
+const crypto = require('crypto');
 
 const varifyaccesRefTokan = async (id) => {
     try {
@@ -41,12 +42,11 @@ const varifyaccesRefTokan = async (id) => {
             message: "internal server error" + error.message
         })
     }
-}
+};
 
 const register = async (req, res) => {
     try {
         // console.log(req.file);
-
         const { email, password } = req.body
         const user = await Users.findOne({
             $or: [{ email }]
@@ -90,14 +90,14 @@ const register = async (req, res) => {
             message: "Internal Server Error." + error.message
         })
     }
-}
+};
 
 const registerOTP = async (req, res) => {
     res.status(200).json({
         success: true,
         message: "otp is sending Successfully."
     })
-}
+};
 
 const login = async (req, res) => {
     try {
@@ -158,7 +158,7 @@ const login = async (req, res) => {
             message: "internal server error" + error.message
         })
     }
-}
+};
 
 const newToken = async (req, res) => {
     try {
@@ -212,7 +212,7 @@ const newToken = async (req, res) => {
             message: "internal server error" + error.message
         })
     }
-}
+};
 
 const logout = async (req, res) => {
     try {
@@ -228,6 +228,7 @@ const logout = async (req, res) => {
                 new: true
             }
         );
+        // if (user) {
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -287,7 +288,7 @@ const checkAuth = async (req, res) => {
             message: 'Authentication failed.'
         })
     }
-}
+};
 
 const listuser = async (req, res) => {
     try {
@@ -309,7 +310,7 @@ const listuser = async (req, res) => {
             message: "Internal server error" + error.message
         })
     }
-}
+};
 
 const getuser = async (req, res) => {
     try {
@@ -331,7 +332,7 @@ const getuser = async (req, res) => {
             message: "Internal server error"
         })
     }
-}
+};
 
 const orderofuser = async (req, res) => {
     const user = await Users.aggregate([
@@ -378,7 +379,7 @@ const orderofuser = async (req, res) => {
         message: 'user fetch successfully.',
         data: user
     })
-}
+};
 
 const updateUser = async (req, res) => {
     try {
@@ -401,7 +402,7 @@ const updateUser = async (req, res) => {
             message: 'Internal Server Error.' + error.message
         })
     }
-}
+};
 
 const deleteUser = async (req, res) => {
     try {
@@ -425,7 +426,117 @@ const deleteUser = async (req, res) => {
             meassage: 'Internal Server Error.' + error.message
         })
     }
-}
+};
+
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await Users.findOne({ email });
+        console.log(user);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        user.otp = otp;
+        user.otpExpires = Date.now() + 300000;
+
+        await user.save({ validateBeforeSave: false });
+
+        await sendMail(user.email, otp);
+
+        res.status(200).json({
+            success: true,
+            message: "OTP sent to your email."
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error."
+        });
+    }
+};
+
+const validateOTP = async (req, res) => {
+    const { otp, email } = req.body;
+
+    try {
+        const user = await Users.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        if (user.otp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP."
+            });
+        }
+
+        user.otp = undefined;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "OTP validated successfully."
+        });
+    } catch (error) {
+        console.error('OTP validation error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    try {
+        if (!newPassword || newPassword.trim() === "") {
+            return res.status(400).json({
+                success: false,
+                message: "New password is required."
+            });
+        }
+
+        const user = await Users.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+
+        user.otp = undefined;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset successfully."
+        });
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
 
 module.exports = {
     register,
@@ -439,5 +550,8 @@ module.exports = {
     getuser,
     orderofuser,
     updateUser,
-    deleteUser
+    deleteUser,
+    forgotPassword,
+    validateOTP,
+    resetPassword
 }

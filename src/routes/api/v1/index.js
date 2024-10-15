@@ -11,6 +11,7 @@ const paymentRouter = require("./payment.route");
 const orderRouter = require("./order.route");
 const ratingRouter = require("./rating.route");
 const cartRouter = require("./cart.route");
+const addressRouter = require('./address.route');
 
 
 router.use("/categories", categoriesRouter);
@@ -23,5 +24,6 @@ router.use("/payment", paymentRouter);
 router.use("/order", orderRouter);
 router.use("/rating", ratingRouter);
 router.use("/cart", cartRouter);
+router.use('/address', addressRouter);
 
 module.exports = router;

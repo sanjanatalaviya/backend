@@ -65,8 +65,8 @@ const addCart = async (req, res) => {
     //     })
     // }
     try {
-        const { user_id, isActive = true, itemsSchema } = req.body;
-        console.log("hjvsajcsdjh", req.body);
+        const { user_id, isActive = true, itemsSchema = [] } = req.body.data;
+        console.log("hjvsajcsdjh", req.body.data);
 
         let cart = await Carts.findOne({ user_id });
         if (!cart) {
@@ -157,10 +157,113 @@ const updateCart = async (req, res) => {
     }
 }
 
+const increment = async (req, res) => {
+    try {
+        const { cart_id, product_id } = req.params;
+        console.log("Helllooooo...", req.params);
+
+        if (!cart_id || !product_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Cart ID and Product ID are required."
+            });
+        }
+
+        const cart = await Carts.findById(cart_id);
+
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found."
+            });
+        }
+
+        const itemIndex = cart.itemsSchema.findIndex(item => item.product_id.toString() === product_id);
+
+        if (itemIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found in cart."
+            });
+        }
+
+        cart.itemsSchema[itemIndex].quantity += 1;
+        await cart.save();
+
+        const cart1 = await Carts.find();
+
+        return res.status(200).json({
+            success: true,
+            message: "Product quantity incremented.",
+            data: cart1
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
+const decrement = async (req, res) => {
+    try {
+        const { cart_id, product_id } = req.params;
+
+        if (!cart_id || !product_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Cart ID and Product ID are required."
+            });
+        }
+
+        const cart = await Carts.findById(cart_id);
+
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found."
+            });
+        }
+
+        const itemIndex = cart.itemsSchema.findIndex(item => item.product_id.toString() === product_id);
+
+        if (itemIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found in cart."
+            });
+        }
+
+        if (cart.itemsSchema[itemIndex].quantity > 1) {
+            cart.itemsSchema[itemIndex].quantity -= 1;
+            await cart.save();
+            const cart1 = await Carts.find();
+
+            return res.status(200).json({
+                success: true,
+                message: "Product quantity incremented.",
+                data: cart1
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: "Quantity cannot be less than 1."
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error: " + error.message
+        });
+    }
+};
+
 module.exports = {
     getCart,
     listCart,
     addCart,
     deleteCart,
-    updateCart
+    updateCart,
+    increment,
+    decrement
 }

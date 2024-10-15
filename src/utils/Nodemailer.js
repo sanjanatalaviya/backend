@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
 
-const sendMail = () => {
+const sendMail = (email, otp) => {
+    console.log("Your OTP is :", otp);
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -11,18 +13,18 @@ const sendMail = () => {
 
     const mailOptions = {
         from: 'sanjanatalaviya1011@gmail.com',
-        to: 'ridhdhidudhat2003@gmail.com',
+        to: 'sanjanatalaviya1011@gmail.com',
         subject: 'Sending Email using Node.js',
-        text: 'sending mail for attachment demo......',
-        attachments: [{
-            filename: 'image',
-            path: 'D:/download.jpg'
-        },
-        {
-            filename: 'pdf',
-            path: 'D:/fullstackProject/backend/e-commerce/public/document.pdf'
-        }
-        ]
+        text: `Your OTP is: ${otp}. It is valid for 5 minutes.`
+        // 'sending mail for attachment demo......'
+        // attachments: [{
+        //     filename: 'image',
+        //     path: 'D:/download.jpg'
+        // },
+        // {
+        //     filename: 'pdf',
+        //     path: 'D:/fullstackProject/backend/e-commerce/public/document.pdf'
+        // }]
     };
 
     transporter.sendMail(mailOptions, function (error, info) {

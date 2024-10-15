@@ -21,6 +21,7 @@ paths:
 
 
 
+
   /users/delete-user/{_id}:
     delete:
       summary: Delete a Users
@@ -245,6 +246,7 @@ paths:
                   type: array
                   items: 
                     type: string   
+
 
 
 
@@ -533,6 +535,7 @@ paths:
 
 
 
+
   /subcategories/get-countcat:
     get:
       summary: Returns a count of subcategories.
@@ -791,6 +794,7 @@ paths:
           description: Subcategory successfully deleted.
         '404':
           description: Subcategory not found.
+
 
 
 
@@ -1273,6 +1277,7 @@ paths:
 
 
 
+
   /variants/productslowstock:
       get:
         summary: List the Variants which has low stock.
@@ -1569,6 +1574,7 @@ paths:
           description: Variants successfully deleted.
         '404':
           description: Variants not found. 
+
 
 
 
@@ -1879,6 +1885,8 @@ paths:
 
 
 
+
+
   /order/cancel:
     get:
       summary: get the cancel orders.
@@ -2160,6 +2168,8 @@ paths:
 
 
 
+
+
   /payment/order/{order_id}:
     get:
       summary: Get a payment of specific Order.
@@ -2302,6 +2312,7 @@ paths:
                     type: boolean  
         '404':
           description: payment not found
+
 
 
 
@@ -2513,6 +2524,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
+
 
 
 

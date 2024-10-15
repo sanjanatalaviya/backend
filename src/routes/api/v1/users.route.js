@@ -13,6 +13,18 @@ router.post('/register',
     usersController.register
 );
 
+router.post('/forgot-password',
+    usersController.forgotPassword
+);
+
+router.post('/reset-password',
+    usersController.resetPassword
+);
+
+router.post('/validateOTP',
+    usersController.validateOTP
+);
+
 router.post('/registerOTP',
     sendOTP,
     usersController.registerOTP

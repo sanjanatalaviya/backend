@@ -17,3 +17,5 @@ module.exports.orderController = require('./order.controller');
 module.exports.paymentController = require('./payment.controller');
 
 module.exports.cartController = require('./cart.controller');
+
+module.exports.AddressController = require('./address.controller');

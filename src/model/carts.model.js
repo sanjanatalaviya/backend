@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const itemsSchema = new mongoose.Schema(
-    
     {
         product_id: {
             type: mongoose.Types.ObjectId,
@@ -17,22 +16,23 @@ const itemsSchema = new mongoose.Schema(
 )
 
 // {
-    //     name: {
-    //         type: String,
-    //         required: true
-    //     },
-    //     value: {
-    //         type: String,
-    //         required: true
-    //     }
-    // }
+//     name: {
+//         type: String,
+//         required: true
+//     },
+//     value: {
+//         type: String,
+//         required: true
+//     }
+// }
 
 const cartsSchema = new mongoose.Schema(
     {
         user_id: {
+            // type: String,
             type: mongoose.Types.ObjectId,
-            ref: "Users",
-            required: true,
+            // ref: "Users",
+            // required: true,
         },
         itemsSchema: [itemsSchema],
         isActive: {
@@ -50,30 +50,30 @@ const Carts = mongoose.model("Carts", cartsSchema);
 module.exports = Carts;
 
 // {
-    //     user_id: {
-    //         type: mongoose.Types.ObjectId,
-    //         ref: 'Users',
-    //         required: true
-    //     },
-    //     name: {
-    //         type: String,
-    //         required: true,
-    //         trim: true,
-    //         unique: true,
-    //         lowercase: true
-    //     },
-    //     description: {
-    //         type: String,
-    //         required: true,
-    //         trim: true
-    //     },
-    //     isActive: {
-    //         type: Boolean,
-    //         default: true
-    //     },
-    //     itemsSchema: [itemsSchema]
-    // },
-    // {
-    //     timestamps: true,
-    //     versionKey: false
-    // }
+//     user_id: {
+//         type: mongoose.Types.ObjectId,
+//         ref: 'Users',
+//         required: true
+//     },
+//     name: {
+//         type: String,
+//         required: true,
+//         trim: true,
+//         unique: true,
+//         lowercase: true
+//     },
+//     description: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     isActive: {
+//         type: Boolean,
+//         default: true
+//     },
+//     itemsSchema: [itemsSchema]
+// },
+// {
+//     timestamps: true,
+//     versionKey: false
+// }

@@ -20,6 +20,9 @@ const usersSchema = new mongoose.Schema(
         password: {
             type: String
         },
+        // otp: {
+        //     type: String
+        // },
         role: {
             type: String,
             required: true

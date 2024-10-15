@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 const route = require("./routes/api/v1/index");
 const passport = require('passport');
 const { FacebookLoginProvider, GoogleLoginProvider } = require('./utils/Provider');
-// const connetSocket = require('./utils/socketIO');   //not supported
+// const connetSocket = require('./utils/socketIO');     //not supported
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const path = require('path');
@@ -19,7 +19,7 @@ FacebookLoginProvider();
 
 const _dirname = path.resolve();
 
-const __swaggerDistPath = path.join(_dirname, 'node_modules', 'swagger-ui-dist'); //install swagger-ui-dist
+const __swaggerDistPath = path.join(_dirname, 'node_modules', 'swagger-ui-dist');   //install swagger-ui-dist
 
 const swaggerDocument = YAML.load(path.resolve('./public', 'api.yaml'));
 
@@ -36,8 +36,8 @@ app.use(
 
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://fronted-vert.vercel.app",
-    // origin: 'http://localhost:3000',
+    // origin: "https://fronted-vert.vercel.app",
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 

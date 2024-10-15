@@ -23,4 +23,12 @@ router.delete('/delete-cart/:_id/:product_id',
     cartController.deleteCart
 );
 
+router.put('/increment-cart/:cart_id/:product_id',
+    cartController.increment
+);
+
+router.put('/decrement-cart/:cart_id/:product_id',
+    cartController.decrement
+);
+
 module.exports = router;
