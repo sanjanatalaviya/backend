@@ -29,6 +29,24 @@ const ordersSchema = new mongoose.Schema(
             ref: 'Payments',
             required: true
         },
+        address: [{
+            street: {
+                type: String,
+                required: true
+            },
+            block_number: {
+                type: String,
+                required: true
+            },
+            locality: {
+                type: String,
+                required: true
+            }
+        }],
+        payment: {
+            type: String,
+            default: 'COD'
+        },
         products: [productSchema],
         amount: {
             type: Number,

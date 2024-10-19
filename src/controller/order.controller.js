@@ -46,10 +46,12 @@ const getOrder = async (req, res) => {
 }
 
 const addOrder = async (req, res) => {
-    try {
-        const { user_id, seller_id, payment_id, products, shipping_address, amount, discount, total_amount, status, shipping_amount } = req.body;
+    console.log("add order", req.body);
 
-        if (!user_id || !seller_id || !payment_id || !products || !shipping_address || amount == null || discount == null || total_amount == null || shipping_amount == null || status == null) {
+    try {
+        const { user_id, seller_id, payment_id, address, products, amount, discount, total_amount, status, shipping_amount } = req.body;
+
+        if (!user_id || !seller_id || !payment_id || !address || !products || amount == null || discount == null || total_amount == null || shipping_amount == null || status == null) {
             return res.status(400).json({
                 success: false,
                 message: "All required order parameters are missing."
@@ -60,8 +62,8 @@ const addOrder = async (req, res) => {
             user_id,
             seller_id,
             payment_id,
+            address,
             products,
-            shipping_address,
             amount,
             discount,
             total_amount,
@@ -127,7 +129,7 @@ const updateOrder = async (req, res) => {
             message: "Internal server error" + error.message
         })
     }
-}
+};
 
 const user = async (req, res) => {
     try {

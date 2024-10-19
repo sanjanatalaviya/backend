@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Categories = require("../model/categories.model")
 
 const listCategory = async (req, res) => {
-    console.log("categorijhxvsjhdvjd", req.user);
+    // console.log("categorijhxvsjhdvjd", req.user);
     // console.log(req.query.page, req.query.pageSize);
 
     let page = parseInt(req.query.page)

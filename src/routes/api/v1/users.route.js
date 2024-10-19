@@ -25,6 +25,10 @@ router.post('/validateOTP',
     usersController.validateOTP
 );
 
+router.post('/send-otp',
+    usersController.sendOTP
+)
+
 router.post('/registerOTP',
     sendOTP,
     usersController.registerOTP

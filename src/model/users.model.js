@@ -20,9 +20,9 @@ const usersSchema = new mongoose.Schema(
         password: {
             type: String
         },
-        // otp: {
-        //     type: String
-        // },
+        otp: {
+            type: String
+        },
         role: {
             type: String,
             required: true
@@ -36,8 +36,14 @@ const usersSchema = new mongoose.Schema(
             // required: true,
             trim: true
         },
+        // avatar: {
+        //     type: String
+        // },
         avatar: {
-            type: String
+            type: {
+                public_id: String,
+                url: String
+            },
         },
         // googleId: {
         //     type: String

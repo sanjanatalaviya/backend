@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require("../utils/Nodemailer");
 const crypto = require('crypto');
+const { uploadeFile } = require("../utils/cloudinary");
 
 const varifyaccesRefTokan = async (id) => {
     try {
-        const user = await Users.findById(id)
-        console.log(user);
+        const user = await Users.findById(id);
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -45,51 +45,131 @@ const varifyaccesRefTokan = async (id) => {
 };
 
 const register = async (req, res) => {
-    try {
-        // console.log(req.file);
-        const { email, password } = req.body
-        const user = await Users.findOne({
-            $or: [{ email }]
-        })
+    console.log("body", req.body);
+    console.log("file", req.file);
 
-        if (user) {
-            return res.status(401).json({
-                success: false,
-                message: "User Already Exist."
+    if (req.file) {
+        const fileRes = await uploadeFile(req.file.path, "avatar");
+        console.log("hellooooooii", fileRes);
+
+        try {
+            console.log(req.file);
+            const { email, password } = req.body;
+
+            const product = await Users.create({
+                ...req.body,
+                avatar: {
+                    public_id: fileRes.public_id,
+                    url: fileRes.url
+                }
+            });
+            if (!product) {
+                res.status(400).json({
+                    success: false,
+                    message: "product parameters is missing.",
+                })
+            }
+
+            const user = await Users.findOne({
+                $or: [{ email }]
             })
-        }
 
-        const hashPassword = await bcrypt.hash(password, 10)
-        const userData = await Users.create({
-            ...req.body, password: hashPassword
-        }) //, avatar: req.file.path 
-        if (!userData) {
-            return res.status(500).json({
-                success: false,
-                message: "Create Hash Password Error."
+            if (user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "User Already Exist."
+                })
+            }
+
+            const hashPassword = await bcrypt.hash(password, 10)
+            const userData = await Users.create({
+                ...req.body, password: hashPassword, avatar: req.file.path
+            }) //, avatar: req.file.path 
+            if (!userData) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Create Hash Password Error."
+                })
+            }
+            const userDataF = await Users.findById({ _id: userData._id }).select("-password")
+
+            if (!userDataF) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Internal Server Error." + error.message
+                })
+            }
+
+            res.status(201).json({
+                success: true,
+                message: "Register Successfully.",
+                data: userDataF,
+                fileData: product
+                // otp: user
             })
-        }
-        const userDataF = await Users.findById({ _id: userData._id }).select("-password")
 
-        if (!userDataF) {
-            return res.status(500).json({
+        } catch (error) {
+            res.status(500).json({
                 success: false,
                 message: "Internal Server Error." + error.message
             })
         }
-        // sendMail();
-        res.status(201).json({
-            success: true,
-            message: "Register Successfully.",
-            data: userDataF
-        })
+    } else {
+        try {
+            const { email, password } = req.body;
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Internal Server Error." + error.message
-        })
+            const user = await Users.findOne({
+                $or: [{ email }]
+            })
+
+            if (user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "User Already Exist."
+                })
+            }
+
+            const hashPassword = await bcrypt.hash(password, 10)
+            const userData = await Users.create({
+                ...req.body, password: hashPassword
+            }) //, avatar: req.file.path 
+            if (!userData) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Create Hash Password Error."
+                })
+            }
+            const userDataF = await Users.findById({ _id: userData._id }).select("-password")
+
+            if (!userDataF) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Internal Server Error." + error.message
+                })
+            }
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            user.otp = otp;
+            user.otpExpires = Date.now() + 300000;
+
+            await user.save({ validateBeforeSave: false });
+
+            await sendMail(user.email, otp);
+
+            sendMail();
+            res.status(201).json({
+                success: true,
+                message: "Register Successfully.",
+                data: userDataF
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Internal Server Error." + error.message
+            })
+        }
     }
+
 };
 
 const registerOTP = async (req, res) => {
@@ -173,7 +253,6 @@ const newToken = async (req, res) => {
             })
         }
         const user = await Users.findById({ _id: tokandata._id }).select("-password -refreshToken");
-        console.log(user);
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -215,8 +294,8 @@ const newToken = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+    // console.log("logout", req.body._id);
     try {
-        console.log("logout", req.body._id);
         const user = await Users.findByIdAndUpdate(
             req.body._id,
             {
@@ -228,14 +307,22 @@ const logout = async (req, res) => {
                 new: true
             }
         );
-        if (user) {
-            // if (!user) {
+
+        // if (user) {
+        if (!user) {
             return res.status(400).json({
                 success: false,
                 message: 'User not logged In.'
             });
         }
-        console.log(user);
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        user.otp = otp;
+        user.otpExpires = Date.now() + 300000;
+
+        await user.save({ validateBeforeSave: false });
+
+        await sendMail(user.email, otp);
 
         res.status(200)
             .clearCookie('accesstoken')
@@ -256,8 +343,6 @@ const logout = async (req, res) => {
 const checkAuth = async (req, res) => {
     try {
         const accesstoken = req.cookies.accesstoken;
-        console.log(accesstoken);
-
         if (!accesstoken) {
             return res.status(401).json({
                 success: false,
@@ -266,7 +351,6 @@ const checkAuth = async (req, res) => {
         }
 
         const validateUser = await jwt.verify(accesstoken, process.env.ACCESS_TOKEN_AUTH_SECRET);
-        console.log(validateUser);
 
         if (!validateUser) {
             return res.status(400).json({
@@ -433,7 +517,6 @@ const forgotPassword = async (req, res) => {
 
     try {
         const user = await Users.findOne({ email });
-        console.log(user);
 
         if (!user) {
             return res.status(404).json({
@@ -463,39 +546,67 @@ const forgotPassword = async (req, res) => {
     }
 };
 
-const validateOTP = async (req, res) => {
-    const { otp, email } = req.body;
+const temporaryOtpStorage = {};
 
+const sendOTP = async (req, res) => {
     try {
-        const user = await Users.findOne({ email });
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found."
-            });
-        }
+        const { email } = req.body;
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        if (user.otp !== otp) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid OTP."
-            });
-        }
+        // Save OTP temporarily (consider using a cache or memory storage)
+        temporaryOtpStorage[email] = otp; // Assuming temporaryOtpStorage is an object in memory
 
-        user.otp = undefined;
-        await user.save();
+        await sendMail(email, otp);
+        console.log("OTP is: ", otp);
 
         res.status(200).json({
             success: true,
-            message: "OTP validated successfully."
+            message: "OTP has been sent to your email."
         });
+
     } catch (error) {
-        console.error('OTP validation error:', error);
-        res.status(500).json({
+        console.error("Error during OTP sending:", error);
+        return res.status(500).json({
             success: false,
-            message: "Internal server error: " + error.message
+            message: "OTP Sending failed. " + error.message
         });
     }
+};
+
+const validateOTP = async (req, res) => {
+    console.log("helllllllloooo", req.body);
+
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            success: false,
+            message: "OTP and email are required."
+        });
+    }
+
+    const storedOtp = temporaryOtpStorage[email];
+
+    if (!storedOtp) {
+        return res.status(400).json({
+            success: false,
+            message: "No OTP found for this email."
+        });
+    }
+
+    if (storedOtp !== otp) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid or expired OTP."
+        });
+    }
+
+    delete temporaryOtpStorage[email];
+
+    res.status(200).json({
+        success: true,
+        message: "OTP validated successfully."
+    });
 };
 
 const resetPassword = async (req, res) => {
@@ -544,6 +655,7 @@ module.exports = {
     newToken,
     logout,
     registerOTP,
+    sendOTP,
     checkAuth,
     varifyaccesRefTokan,
     listuser,
